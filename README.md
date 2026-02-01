@@ -1,4 +1,4 @@
-# NativeMachineExecute-C-
+# NativeMachineExecute-C#
 
 Руководство по NEM (Native Execute Machine) Beta version, буду переписывать и улучшать в свободное время, можете присоеденятся к разработке
 
