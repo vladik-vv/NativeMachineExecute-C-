@@ -1,0 +1,11 @@
+start:
+    go main
+end
+
+.block main:
+    out "welcome to hell"
+end
+
+stop:
+    clear registres
+end

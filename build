@@ -1,0 +1,15 @@
+#!/bin/bash
+
+RUNTIME="linux-x64"
+CONFIG="Release"
+FRAMEWORK="net10.0"
+
+dotnet publish -c Release -r linux-x64 \
+  /p:PlatformTarget=x64 \
+  /p:IlcInstructionSet="native" \
+  /p:OptimizationPreference=Speed \
+  /p:DebugType=None \
+  /p:DebugSymbols=false \
+  /p:SelfContained=true \
+  /p:PublishSingleFile=true \
+  /p:EnableCompressionInSingleFile=true -o ./publish-linux

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "/IoCPVZp+no=",
+  "success": true,
+  "projectFilePath": "/home/vladik/Документы/HARD/tren/nemASM/nemASM.csproj",
+  "expectedPackageFiles": [
+    "/home/vladik/.nuget/packages/microsoft.dotnet.ilcompiler/10.0.2/microsoft.dotnet.ilcompiler.10.0.2.nupkg.sha512",
+    "/home/vladik/.nuget/packages/microsoft.net.illink.tasks/10.0.2/microsoft.net.illink.tasks.10.0.2.nupkg.sha512",
+    "/home/vladik/.nuget/packages/runtime.linux-x64.microsoft.dotnet.ilcompiler/10.0.2/runtime.linux-x64.microsoft.dotnet.ilcompiler.10.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

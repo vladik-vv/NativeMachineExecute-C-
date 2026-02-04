@@ -1,0 +1,14 @@
+/home/vladik/Документы/HARD/tren/Nem2/bin/Debug/net10.0/Nem2
+/home/vladik/Документы/HARD/tren/Nem2/bin/Debug/net10.0/Nem2.deps.json
+/home/vladik/Документы/HARD/tren/Nem2/bin/Debug/net10.0/Nem2.runtimeconfig.json
+/home/vladik/Документы/HARD/tren/Nem2/bin/Debug/net10.0/Nem2.dll
+/home/vladik/Документы/HARD/tren/Nem2/bin/Debug/net10.0/Nem2.pdb
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/Nem2.GeneratedMSBuildEditorConfig.editorconfig
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/Nem2.AssemblyInfoInputs.cache
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/Nem2.AssemblyInfo.cs
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/Nem2.csproj.CoreCompileInputs.cache
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/Nem2.dll
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/refint/Nem2.dll
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/Nem2.pdb
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/Nem2.genruntimeconfig.cache
+/home/vladik/Документы/HARD/tren/Nem2/obj/Debug/net10.0/ref/Nem2.dll
