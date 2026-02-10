@@ -1,59 +1,8 @@
 __start:
-    mov r1, 40
-    vec2, player
-    arr line, s[40]
-    go game
-hlt
-
-.p game:
-
-    cmp system.key, Q
-    ife, go stopgame   
-
-    cmp system.key, A
-    ife, call actA
-
-    cmp system.key, D
-    ife, call actD
-    
-    mov r2, 0
-    call printmap
-    go game
-
-
-.p actA:
-    sub player.x, 1
-    sub r3, 1
-    mov line[r3], "X"
-    wait, 80
-    ret
-
-
-.p actD:
-    add player.x, 1
-    add r3, 1
-    mov line[r3], "X"
-    wait, 80
-    ret
-
-
-.p printmap:
-    cmp r2, 40
-    ife, go ret
-
-    out, line[r2]
-    add r2, 1
-    go printmap
-
-
-
-.p stopgame:
-    next
-    out, "конец игры"
-hlt
-
+    mov r2, 150
+    mov r1, r2
+    div r1, 3
+    out r1, 0
 
 __stop:
     clear registres
-    clear player
-hlt

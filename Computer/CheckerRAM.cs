@@ -1,7 +1,6 @@
-using static PC.Computer;
+using static Computer;
 
-struct CheckRam{
-    
+static class CheckerRam{   
     public static void CheckRAM(){
         
         if (RAM > maxRAM){

@@ -1,8 +1,7 @@
-start:
+__start:
     go main
-end
 
-.block main:
+.p main:
     out, "Введите делимое число: "
     inp, r1
     out, "Введите делитель: "
@@ -13,18 +12,15 @@ end
     cmp rnr, 0
     ife, go finish
     ifn, go nefinish
-    
-end
 
-.block finish:
+.p finish:
     out, "Остатка нету"
-end
+    hlt
 
-.block nefinish:
+.p nefinish:
     out, "Остаток есть: "
     out, rnr
-end
+    hlt
 
-stop:
+__stop:
     clear registres
-end
