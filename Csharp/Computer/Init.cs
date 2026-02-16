@@ -1,6 +1,9 @@
-static class Computer
+/// <summary>
+/// Структура инициализации
+/// </summary>
+struct Init
 {
-    private static ConsoleKeyInfo? keyInfo = null;
+    public static ConsoleKeyInfo keyInfo;
     private static CancellationTokenSource cts = new ();
     public const int maxRAM = 262144; // Максимальное количество ОЗУ в пк
     public static int RAM = 0; // Состояние оперативки
@@ -15,12 +18,15 @@ static class Computer
         {"rvc", 0}  // регистр rvc - первичная задача, сохранять дистанцию, высчитанную в программе между двумя векторами.
     };
 
-    public static async void Start(){
+    public static Dictionary<string, double> stackRegistres = new Dictionary<string, double>{
+        {"r1", 0}, {"r2", 0}, {"r3", 0}, {"r4", 0}, {"r5", 0}, {"rnd", 0}, {"rnr", 0}, {"rvc", 0},
+    };
+
+    public static async void StartInit(){
         RAM = 65536; // При запуске пк, ОЗУ забит 64 мегабайтами. ( Операционка + системы слежки )
 
         cts = new CancellationTokenSource();
         Task keyWatch = Task.Run(() => CheckKey(cts.Token));
-
     } 
 
     public static void SystemMonitor(){
@@ -40,13 +46,10 @@ static class Computer
         Console.WriteLine("------------------------------------------------------------");
     }
 
-    public static void KillProcessRAM(){
-        Console.WriteLine("\nError: RAM IS FULL\n");
-        Environment.Exit(0);
-    }
-
+    // запускаем проверку нажатой клавиши в реальном времени в отдельном потоке
+    // и записываем изменения в keyInfo
     private static async Task CheckKey(CancellationToken cancellationToken){
-        while (!cancellationToken.IsCancellationRequested){
+        while (!cancellationToken.IsCancellationRequested){ 
             if (Console.KeyAvailable){
                 keyInfo = Console.ReadKey(true);
             }
@@ -54,7 +57,7 @@ static class Computer
         }
     }
 
-    public static void ClearRegistres(){
+    public static void ClearRegistres(){    // функция очищающая регистры
         foreach (string key in registres.Keys){
             registres[key] = 0;
         }

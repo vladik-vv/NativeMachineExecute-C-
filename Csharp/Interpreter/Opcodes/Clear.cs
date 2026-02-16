@@ -1,10 +1,8 @@
-using System.Text;
 using static Parser;
-using static Computer;
+using static Init;
+using static Executer;
 
-namespace OpCodes;
-
-class Clear : Executer{ // typeArg1, nameArg1. value, byteValue, shortValue, floatValue, doubleValue, isHigh, isEqual, currentType, line
+struct Clear{ 
 
     public static void Execute(){
         switch (nameArg1){

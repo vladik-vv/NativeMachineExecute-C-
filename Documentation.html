@@ -1,0 +1,2881 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEM Assembly - Документация</title>
+<style>
+    .theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;  
+    float: right;       
+    margin-top: 5px;
+    color: white;
+    z-index: 100;
+}
+    
+    .theme-switch {
+        display: inline-block;
+        height: 24px;
+        position: relative;
+        width: 50px;
+        margin-left: 10px;
+    }
+    
+    .theme-switch input {
+        display: none;
+    }
+    
+    .slider {
+        background-color: #ccc;
+        bottom: 0;
+        cursor: pointer;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transition: .3s;
+        border-radius: 34px;
+    }
+    
+    .slider:before {
+        background-color: white;
+        bottom: 3px;
+        content: "";
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 18px;
+        left: 3px;
+        position: absolute;
+        transition: .3s;
+        width: 18px;
+        border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+        background-color: #505050;
+    }
+    
+    input:checked + .slider:before {
+        content: "";
+        transform: translateX(26px);
+    }
+    
+    body.dark-theme {
+        background-color: #1e1e1e;
+    }
+    
+    body.dark-theme .container {
+        background-color: #252526;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    body.dark-theme header {
+        background-color: #2d2d2d;
+        border-bottom: 4px solid #0078d4;
+    }
+    
+    body.dark-theme nav {
+        background-color: #333333;
+        border-bottom: 1px solid #404040;
+    }
+    
+    body.dark-theme nav a {
+        color: #4fa3e0;
+    }
+    
+    body.dark-theme .content {
+        color: #cccccc;
+    }
+    
+    body.dark-theme h3,
+    body.dark-theme h4,
+    body.dark-theme h5 {
+        color: #e0e0e0;
+    }
+    
+    body.dark-theme h3 {
+        border-bottom-color: #0078d4;
+    }
+    
+    body.dark-theme p {
+        color: #cccccc;
+    }
+    
+    body.dark-theme code {
+        background-color: #3c3c3c;
+        color: #ce9178;
+    }
+    
+    body.dark-theme pre {
+        background-color: #1e1e1e;
+        border: 1px solid #3c3c3c;
+    }
+    
+    body.dark-theme table {
+        background-color: #2d2d2d;
+    }
+    
+    body.dark-theme th {
+        background-color: #0078d4;
+    }
+    
+    body.dark-theme td {
+        border-bottom-color: #404040;
+    }
+    
+    body.dark-theme tr:hover {
+        background-color: #3d3d3d;
+    }
+    
+    body.dark-theme .note {
+        background-color: #333333;
+        border-left-color: #ffb900;
+    }
+    
+    body.dark-theme .note strong {
+        color: #e0e0e0;
+    }
+    
+    body.dark-theme footer {
+        background-color: #2d2d2d;
+        color: #999999;
+        border-top-color: #404040;
+    }
+    
+    body.dark-theme .badge {
+        background-color: #2d2d5a;
+        border-color: #4fa3e0;
+        color: #4fa3e0;
+    }
+    
+    body.dark-theme hr {
+        border-top-color: #404040;
+    }
+    
+    body, .container, header, nav, .content, table, pre, code, footer {
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333333;
+            line-height: 1.5;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        header {
+    background-color: #0078d4;
+    color: white;
+    padding: 20px 40px;
+    border-bottom: 4px solid #005a9e;
+    overflow: auto;      
+}
+        header h1 {
+            font-weight: 400;
+            font-size: 36px;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+        header h2 {
+            font-weight: 300;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        header .version {
+            margin-top: 15px;
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 16px;
+        }
+        nav {
+            background-color: #f0f0f0;
+            padding: 12px 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        nav a {
+            color: #0078d4;
+            text-decoration: none;
+            margin-right: 24px;
+            font-weight: 500;
+            font-size: 15px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            padding: 40px;
+        }
+        h3 {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #1e1e1e;
+            border-bottom: 2px solid #0078d4;
+            padding-bottom: 8px;
+        }
+        h4 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 30px 0 15px 0;
+            color: #1e1e1e;
+        }
+        h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+            color: #1e1e1e;
+        }
+        p {
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+        ul, ol {
+            margin: 15px 0 20px 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 15px;
+        }
+        th {
+            background-color: #0078d4;
+            color: white;
+            font-weight: 500;
+            padding: 12px 10px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        tr:hover {
+            background-color: #f5f9ff;
+        }
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #d14;
+        }
+        pre {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        .note {
+            background-color: #fff8e5;
+            border-left: 4px solid #ffb900;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+        .note strong {
+            color: #1e1e1e;
+        }
+        footer {
+            background-color: #f0f0f0;
+            padding: 20px 40px;
+            text-align: center;
+            color: #666666;
+            font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
+        }
+        .badge {
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            color: #0078d4;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 30px 0;
+        }
+        .math {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+        }
+        .instruction-table td:first-child {
+            font-weight: 600;
+            color: #0078d4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NEM Assembly</h1>
+            <h2>Руководство по языку ассемблера виртуальной машины Native Execute Machine</h2>
+            <div class="version">Версия 1.0 — 17 февраля 2026 г.</div>
+              <div class="theme-switch-wrapper">
+                <span id="theme-label">Светлая</span>
+                <div class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <label for="theme-toggle" class="slider"></label>
+                </div>
+            </div>
+        </header>
+        
+        <nav>
+            <a href="#getting-to-know">1. Знакомство с NEM</a>
+            <a href="#terminal">1.8. Терминал NEM</a>
+            <a href="#data-types">2. Типы данных</a>
+            <a href="#vectors">3. Векторы и структуры</a>
+            <a href="#system-instructions">4. Системные инструкции</a>
+            <a href="#math-instructions">5. Арифметические и математические инструкции</a>
+            <a href="#examples">6. Примеры программ</a>
+        </nav>
+        
+        <div class="content">
+            <section id="getting-to-know">
+                <h3>1. Знакомство с NEM Assembly</h3>
+                
+                <p>NEM Assembly (Native Execute Machine Assembly) — это низкоуровневый язык программирования для виртуальной машины NEM, разработанный как компонент игрового проекта "zabvensk". Язык предоставляет разработчикам полный контроль над виртуальным оборудованием: регистрами, оперативной памятью и периферийными устройствами ввода-вывода.</p>
+                
+                <p>Архитектура NEM спроектирована с учётом образовательных целей и задач игровой логики, где требуется тонкое управление ресурсами. Синтаксис языка интуитивно понятен разработчикам, знакомым с ассемблером x86, но имеет ряд упрощений и специализированных инструкций для работы с векторами и математическими операциями.</p>
+                
+                <h4>1.1. История версий</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Версия</th>
+                            <th>Дата</th>
+                            <th>Основные изменения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1.0</strong></td>
+                            <td>17.02.2026</td>
+                            <td>Первая стабильная версия. Включает базовый набор инструкций, поддержку векторов (vec2, vec3, vec4), математические операции (sin, cos, tan), операции с массивами и условные переходы.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>1.2. Назначение и область применения</h4>
+                <p>NEM Assembly 1.0 является необязательной частью игрового проекта "zabvensk"</p>
+                
+                <div class="note">
+                    <strong>Примечание.</strong> Язык предназначен исключительно для использования внутри виртуальной машины NEM и не может быть скомпилирован в машинный код реального процессора. Все программы выполняются в безопасной среде интерпретатора, что исключает возможность повреждения основной системы.
+                </div>
+                
+                <h4>1.3. Основные возможности</h4>
+                <ul>
+                    <li><strong>Регистровая архитектура.</strong> Восемь регистров общего назначения (r1-r5, rnd, rnr, rvc) для быстрых вычислений.</li>
+                    <li><strong>Строгая типизация.</strong> Поддержка байтовых (byte), коротких (short), вещественных (float) и длинных (double) чисел, а также строк (string).</li>
+                    <li><strong>Векторная математика.</strong> Встроенные типы vec2, vec3, vec4 с поддержкой всех арифметических операций и функций расстояния.</li>
+                    <li><strong>Управление памятью.</strong> Ручное выделение и освобождение памяти под переменные и массивы с контролем переполнения.</li>
+                    <li><strong>Условные и безусловные переходы.</strong> Полноценная поддержка меток и стековых вызовов (call/ret).</li>
+                    <li><strong>Ввод-вывод.</strong> Работа с консолью (out, inp) и отслеживание состояния клавиатуры (keyboard.key).</li>
+                </ul>
+                
+                <h4>1.4. Структура программы</h4>
+                <p>Программа на NEM Assembly состоит из последовательности инструкций и меток. Выполнение начинается с метки <code>__start</code> и завершается при достижении метки <code>__stop</code> или инструкции <code>hlt</code>. Блоки кода объявляются с помощью директивы <code>.p</code>.</p>
+                
+                <pre>; Пример минимальной программы
+__start:
+    mov r1, 404
+    out r1, 1
+    hlt
+
+__stop:
+    clear registres</pre>
+                
+                <h4>1.5. Соглашения о синтаксисе</h4>
+                <ul>
+                    <li><strong>Регистры</strong> обозначаются как r1, r2, r3, r4, r5, rnd, rnr, rvc.</li>
+                    <li><strong>Метки</strong> начинаются с буквы и могут содержать буквы, цифры и символ подчёркивания. Завершаются двоеточием.</li>
+                    <li><strong>Блоки</strong> объявляются директивой <code>.p имя_блока:</code>.</li>
+                    <li><strong>Комментарии</strong> начинаются с точки с запятой (<code>;</code>) и продолжаются до конца строки.</li>
+                    <li><strong>Строковые литералы</strong> заключаются в двойные кавычки (<code>"текст"</code>).</li>
+                    <li><strong>Числовые литералы</strong> записываются в десятичном формате (отрицательные числа допускаются).</li>
+                </ul>
+                
+                <div class="note">
+                    <strong>Важно.</strong> Запятые между аргументами инструкций не являются обязательными, но их использование повышает читаемость кода. Интерпретатор игнорирует запятые при разборе.
+                </div>
+                
+                <h4>1.6. Специальные регистры</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Регистр</th>
+                            <th>Назначение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>r1 - r5</code></td>
+                            <td>Регистры общего назначения. Используются для хранения промежуточных результатов вычислений, адресов и счётчиков циклов.</td>
+                        </tr>
+                        <tr>
+                            <td><code>rnd</code></td>
+                            <td>Регистр случайного числа. Заполняется инструкцией <code>rand</code> и хранит сгенерированное значение.</td>
+                        </tr>
+                        <tr>
+                            <td><code>rnr</code></td>
+                            <td>Регистр остатка. Автоматически заполняется остатком от деления при выполнении инструкции <code>div</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>rvc</code></td>
+                            <td>Регистр векторной дистанции. Содержит результат вычисления расстояния между векторами (инструкция <code>dst</code>).</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>1.7. Среда выполнения</h4>
+                <p>Интерпретатор NEM работает в составе виртуальной машины, обеспечивающей:</p>
+                <ul>
+                    <li>Контроль использования оперативной памяти (максимум 262144 байта).</li>
+                    <li>Обработку системных прерываний (клавиатура, таймер).</li>
+                    <li>Защиту от переполнения стека и некорректных обращений к памяти.</li>
+                </ul>
+                <p>При запуске программы через терминал NEM (команда <code>run</code>) производится полный синтаксический анализ, поиск меток и последующее выполнение кода строка за строкой. В случае ошибки выполнение прекращается с выводом кода ошибки.</p>
+                
+                <hr>
+                <p style="text-align: right; color: #666;"><em>Конец раздела 1.</em></p>
+            </section>
+            <section id="terminal">
+                <h4>1.8. Терминал NEM</h4>
+                
+                <p>Терминал NEM (Native Execute Machine Terminal) представляет собой интерфейс командной строки для управления виртуальной машиной, создания и выполнения программ на языке NEM Assembly. Терминал поддерживает два режима работы: главное меню и режим разработки NEM.</p>
+                
+                <h5>1.8.1. Запуск терминала</h5>
+                <p>При запуске приложения пользователь попадает в главное меню системы. Приглашение командной строки имеет вид <code>user:</code>.</p>
+                
+                <pre>System Control num: 130022
+
+user: _</pre>
+                
+                <h5>1.8.2. Команды главного меню</h5>
+                <p>Главное меню предоставляет базовые команды для управления системой и перехода в режим разработки.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Команда</th>
+                            <th>Описание</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>help</code>, <code>?</code>, <code>commands</code></td>
+                            <td>Вывод списка доступных команд.</td>
+                            <td><code>user: help</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>start nem</code></td>
+                            <td>Переход в режим разработки NEM.</td>
+                            <td><code>user: start nem</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>system monitor</code></td>
+                            <td>Отображение информации о состоянии виртуальной машины: использование RAM, частота процессора, значения регистров.</td>
+                            <td><code>user: system monitor</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>shutdown</code></td>
+                            <td>Завершение работы виртуальной машины и выход из приложения.</td>
+                            <td><code>user: shutdown</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>clear</code></td>
+                            <td>Очистка экрана консоли.</td>
+                            <td><code>user: clear</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>1.8.3. Системный монитор</h5>
+                <p>Команда <code>system monitor</code> выводит подробную информацию о состоянии виртуальной машины:</p>
+                <ul>
+                    <li><strong>RAM</strong> — текущее использование оперативной памяти и процент заполнения.</li>
+                    <li><strong>CPU</strong> — частота процессора (в текущей версии эмулируется).</li>
+                    <li><strong>Регистры</strong> — текущие значения всех регистров (r1-r5, rnd, rnr, rvc) и их максимально допустимые значения.</li>
+                </ul>
+                
+    <pre>------------------------------------------------------------
+| RAM : 65836 / 262144 | 25%
+| CPU (1) 0.01 / 0.20 GHz
+|
+| Usage Registres CPU
+| r1: 404 / 9223372036854775807
+| r2: 100 / 9223372036854775807
+| r3: 0 / 9223372036854775807
+| r4: 0 / 9223372036854775807
+| r5: 0 / 9223372036854775807
+| rnd: 0 / 9223372036854775807
+| rnr: 0 / 9223372036854775807
+| rvc: 0 / 9223372036854775807
+------------------------------------------------------------</pre>
+                
+                <h5>1.8.4. Режим разработки NEM</h5>
+                <p>После ввода команды <code>start nem</code> терминал переходит в режим разработки. Приглашение командной строки изменяется на <code>nem:</code>.</p>
+                
+                <pre>Native Execute Machine
+
+nem: _</pre>
+                
+                <h5>1.8.5. Команды управления файлами в режиме NEM</h5>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Команда</th>
+                            <th>Описание</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>new имя_файла</code></td>
+                            <td>Создание нового файла с программой. По умолчанию создаётся файл с приветственным кодом "welcome to hell".</td>
+                            <td><code>nem: new program.n</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>new имя_файла -e</code></td>
+                            <td>Создание пустого файла.</td>
+                            <td><code>nem: new program.n -e</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>new имя_файла -c</code></td>
+                            <td>Создание файла с шаблоном калькулятора.</td>
+                            <td><code>nem: new calc.n -c</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>delete имя_файла</code></td>
+                            <td>Удаление указанного файла.</td>
+                            <td><code>nem: delete program.n</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>list</code></td>
+                            <td>Вывод списка всех файлов в текущем каталоге.</td>
+                            <td><code>nem: list</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>1.8.6. Команды выполнения в режиме NEM</h5>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Команда</th>
+                            <th>Описание</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>run имя_файла</code></td>
+                            <td>Запуск программы на выполнение. Производится синтаксический анализ, поиск меток и интерпретация кода.</td>
+                            <td><code>nem: run program.n</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>dis имя_файла</code></td>
+                            <td>Дизассемблирование файла — вывод hex-представления инструкций.</td>
+                            <td><code>nem: dis program.n</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>1.8.7. Дополнительные команды в режиме NEM</h5>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Команда</th>
+                            <th>Описание</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>help</code>, <code>?</code>, <code>commands</code></td>
+                            <td>Вывод списка команд режима NEM.</td>
+                            <td><code>nem: help</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>clear</code></td>
+                            <td>Очистка экрана консоли.</td>
+                            <td><code>nem: clear</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>exit</code></td>
+                            <td>Возврат в главное меню.</td>
+                            <td><code>nem: exit</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>1.8.8. Формат имени файла</h5>
+                <p>В NEM Assembly рекомендуется использовать расширение <code>.n</code> или <code>.nem</code> для файлов с исходным кодом. При создании файла расширение должно быть указано явно. Все команды работы с файлами чувствительны к регистру символов.</p>
+                
+                <pre>; Примеры корректных имён файлов:
+program.n
+calc.nem
+test_001.n
+game_logic.n</pre>
+                
+                <h5>1.8.9. Пример сессии работы в терминале</h5>
+                
+                <pre>System Control num: 130022
+
+user: start nem
+
+Native Execute Machine
+
+nem: new hello.n -e          ; Создание пустого файла
+nem: list
+----------------------
+./hello.n
+----------------------
+nem: run hello.n             ; Запуск пустой программы (ничего не произойдёт)
+
+nem: exit                    ; Возврат в главное меню
+
+user: system monitor         ; Просмотр состояния системы
+------------------------------------------------------------
+| RAM : 65536 / 262144 | 25%
+| CPU (1) 0.01 / 0.20 GHz
+...
+------------------------------------------------------------
+
+user: shutdown               ; Завершение работы</pre>
+                
+                <div class="note">
+                    <strong>Примечание.</strong> Все команды терминала можно вводить как в нижнем, так и в верхнем регистре. Пробелы между аргументами обязательны. Для получения справки по любой команде используйте <code>help</code>.
+                </div>
+                
+                <hr>
+                <p style="text-align: right; color: #666;"><em>Конец раздела 1.8. Следующий раздел: Типы данных в NEM.</em></p>
+            </section>
+
+            <section id="data-types">
+                <h3>2. Типы данных в NEM</h3>
+                
+                <p>В NEM Assembly реализована строгая система типов данных, которая определяет, как информация хранится в памяти и обрабатывается процессором. Каждая переменная или элемент массива принадлежит одному из предопределённых типов, что обеспечивает контроль над использованием памяти и корректность выполнения арифметических операций.</p>
+                
+                <h4>2.1. Классификация типов данных</h4>
+                <p>Все типы данных в NEM делятся на три категории: скалярные (примитивные) типы, векторные типы и составные типы (массивы). Каждый тип имеет фиксированный размер в байтах, который учитывается при выделении памяти.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Категория</th>
+                            <th>Тип</th>
+                            <th>Размер (байт)</th>
+                            <th>Директива объявления</th>
+                            <th>Диапазон значений</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="5"><strong>Скалярные</strong></td>
+                            <td><code>byte</code></td>
+                            <td>1</td>
+                            <td><code>db</code></td>
+                            <td>0 .. 255 (беззнаковый)</td>
+                        </tr>
+                        <tr>
+                            <td><code>short</code></td>
+                            <td>2</td>
+                            <td><code>dw</code></td>
+                            <td>-32768 .. 32767</td>
+                        </tr>
+                        <tr>
+                            <td><code>float</code></td>
+                            <td>4</td>
+                            <td><code>dd</code></td>
+                            <td>±1.5×10<sup>-45</sup> .. ±3.4×10<sup>38</sup></td>
+                        </tr>
+                        <tr>
+                            <td><code>double</code></td>
+                            <td>8</td>
+                            <td><code>dq</code></td>
+                            <td>±5.0×10<sup>-324</sup> .. ±1.7×10<sup>308</sup></td>
+                        </tr>
+                        <tr>
+                            <td><code>string</code></td>
+                            <td>переменный</td>
+                            <td><code>ds</code></td>
+                            <td>Любая строка Unicode (длина ограничена RAM)</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><strong>Векторные</strong></td>
+                            <td><code>vec2</code></td>
+                            <td>16 (2×8)</td>
+                            <td><code>vec2</code></td>
+                            <td>Две координаты типа double</td>
+                        </tr>
+                        <tr>
+                            <td><code>vec3</code></td>
+                            <td>24 (3×8)</td>
+                            <td><code>vec3</code></td>
+                            <td>Три координаты типа double</td>
+                        </tr>
+                        <tr>
+                            <td><code>vec4</code></td>
+                            <td>32 (4×8)</td>
+                            <td><code>vec4</code></td>
+                            <td>Четыре координаты типа double</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5"><strong>Массивы</strong></td>
+                            <td><code>byte[]</code></td>
+                            <td>длина × 1</td>
+                            <td><code>arrb</code></td>
+                            <td>Массив байтов</td>
+                        </tr>
+                        <tr>
+                            <td><code>short[]</code></td>
+                            <td>длина × 2</td>
+                            <td><code>arrw</code></td>
+                            <td>Массив коротких целых</td>
+                        </tr>
+                        <tr>
+                            <td><code>float[]</code></td>
+                            <td>длина × 4</td>
+                            <td><code>arrd</code></td>
+                            <td>Массив вещественных чисел</td>
+                        </tr>
+                        <tr>
+                            <td><code>double[]</code></td>
+                            <td>длина × 8</td>
+                            <td><code>arrq</code></td>
+                            <td>Массив длинных вещественных</td>
+                        </tr>
+                        <tr>
+                            <td><code>string[]</code></td>
+                            <td>длина × (переменный)</td>
+                            <td><code>arrs</code></td>
+                            <td>Массив строк</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>2.2. Скалярные типы данных</h4>
+                
+                <h5>2.2.1. Байтовый тип (byte)</h5>
+                <p>Тип <code>byte</code> предназначен для хранения беззнаковых целых чисел в диапазоне от 0 до 255. Занимает 1 байт памяти. Используется для экономии памяти при работе с небольшими числами, флагами состояния или индексами массивов. Объявляется директивой <code>db</code>.</p>
+                <pre>; Примеры объявления байтовых переменных
+db counter, 10        ; counter = 10
+db flag, 1            ; flag = 1
+db zero, 0            ; zero = 0</pre>
+
+                <h5>2.2.2. Короткий целый тип (short)</h5>
+                <p>Тип <code>short</code> хранит знаковые целые числа от -32768 до 32767. Размер — 2 байта. Оптимален для хранения координат, небольших счётчиков и идентификаторов объектов. Объявляется директивой <code>dw</code>.</p>
+                <pre>; Примеры объявления коротких целых
+dw health, 100        ; health = 100
+dw temperature, -15   ; temperature = -15
+dw id, 4500           ; id = 4500</pre>
+
+                <h5>2.2.3. Вещественный тип (float)</h5>
+                <p>Тип <code>float</code> (число с плавающей точкой одинарной точности) соответствует стандарту IEEE 754. Занимает 4 байта. Используется для хранения дробных чисел, когда достаточно точности примерно 6-7 значащих цифр. Объявляется директивой <code>dd</code>.</p>
+                <pre>; Примеры объявления вещественных чисел
+dd speed, 12.5        ; speed = 12.5
+dd gravity, -9.81     ; gravity = -9.81
+dd coefficient, 0.33  ; coefficient = 0.33</pre>
+
+                <h5>2.2.4. Длинный вещественный тип (double)</h5>
+                <p>Тип <code>double</code> (число с плавающей точкой двойной точности) обеспечивает высокую точность вычислений (примерно 15-16 значащих цифр). Занимает 8 байт. Рекомендуется для математических расчётов, где важна точность, например, при вычислении расстояний или тригонометрических функций. Объявляется директивой <code>dq</code>.</p>
+                <pre>; Примеры объявления длинных вещественных
+dq pi, 3.14159265359  ; pi = 3.14159265359
+dq distance, 12345.67 ; distance = 12345.67
+dq result, 0.00000001 ; result = 1e-8</pre>
+
+                <h5>2.2.5. Строковый тип (string)</h5>
+                <p>Тип <code>string</code> предназначен для хранения текстовых данных произвольной длины. Память выделяется динамически в соответствии с длиной строки. Строки могут содержать любые символы Unicode. Объявляются директивой <code>ds</code>.</p>
+                <pre>; Примеры объявления строковых переменных
+ds name, "Player 1"           ; name = "Player 1"
+ds message, "Hello, world!"   ; message = "Hello, world!"
+ds empty, ""                  ; empty = ""</pre>
+
+                <div class="note">
+                    <strong>Важно.</strong> При выполнении операций сложения (<code>add</code>) со строковыми переменными производится конкатенация строк. Арифметические операции (<code>sub</code>, <code>mul</code>, <code>div</code>) для строкового типа недопустимы и вызовут ошибку времени выполнения.
+                </div>
+
+                <h4>2.3. Векторные типы данных</h4>
+                <p>Векторные типы являются составными структурами, объединяющими несколько координат типа double. Они оптимизированы для геометрических и физических расчётов, характерных для игровой логики. Все векторные операции выполняются покомпонентно.</p>
+
+                <h5>2.3.1. Двумерный вектор (vec2)</h5>
+                <p>Тип <code>vec2</code> представляет точку или вектор в двумерном пространстве с координатами X и Y. Каждая координата хранится как double (8 байт), общий размер вектора — 16 байт. Объявляется директивой <code>vec2</code>.</p>
+                <pre>; Пример объявления двумерного вектора
+vec2 player           ; player.x = 0, player.y = 0
+vec2 target</pre>
+
+                <h5>2.3.2. Трёхмерный вектор (vec3)</h5>
+                <p>Тип <code>vec3</code> представляет точку или вектор в трёхмерном пространстве с координатами X, Y, Z. Размер — 24 байта. Объявляется директивой <code>vec3</code>.</p>
+                <pre>; Пример объявления трёхмерного вектора
+vec3 cube             ; cube.x = 0, cube.y = 0, cube.z = 0
+vec3 camera</pre>
+
+                <h5>2.3.3. Четырёхмерный вектор (vec4)</h5>
+                <p>Тип <code>vec4</code> представляет вектор в четырёхмерном пространстве с координатами X, Y, Z, W. Может использоваться для представления трёхмерных объектов с дополнительным параметром (например, весом или временем). Размер — 32 байта. Объявляется директивой <code>vec4</code>.</p>
+                <pre>; Пример объявления четырёхмерного вектора
+vec4 space            ; space.x = 0, space.y = 0, space.z = 0, space.w = 0</pre>
+
+                <h5>2.3.4. Доступ к компонентам векторов</h5>
+                <p>Для обращения к отдельным координатам вектора используется точечная нотация: <code>имя_вектора.координата</code>. Координаты обозначаются строчными латинскими буквами: x, y, z, w.</p>
+                <pre>; Примеры доступа к компонентам векторов
+mov player.x, 100     ; Установка координаты X
+add player.y, 5       ; Увеличение координаты Y на 5
+out cube.z, 1         ; Вывод координаты Z</pre>
+
+                <h4>2.4. Массивы</h4>
+                <p>Массивы в NEM позволяют хранить последовательности однотипных элементов. Индексация начинается с 0. Размер массива задаётся при объявлении и не может быть изменён во время выполнения программы. Доступ к элементам осуществляется по индексу в квадратных скобках.</p>
+
+                <h5>2.4.1. Массивы байтов (arrb)</h5>
+                <pre>; Объявление массива байтов из 10 элементов
+arrb scores, 10
+mov scores[0], 100    ; Присваивание значения первому элементу
+mov scores[9], 255    ; Присваивание значения последнему элементу</pre>
+
+                <h5>2.4.2. Массивы коротких целых (arrw)</h5>
+                <pre>; Объявление массива short из 20 элементов
+arrw temperatures, 20
+mov temperatures[5], -10</pre>
+
+                <h5>2.4.3. Массивы вещественных чисел (arrd)</h5>
+                <pre>; Объявление массива float из 15 элементов
+arrd coefficients, 15
+mov coefficients[0], 1.5</pre>
+
+                <h5>2.4.4. Массивы длинных вещественных чисел (arrq)</h5>
+                <pre>; Объявление массива double из 8 элементов
+arrq matrix, 8
+mov matrix[3], 3.14159</pre>
+
+                <h5>2.4.5. Массивы строк (arrs)</h5>
+                <pre>; Объявление массива строк из 5 элементов
+arrs messages, 5
+mov messages[0], "Error"
+mov messages[1], "Warning"</pre>
+
+                <h5>2.4.6. Использование регистров и выражений в индексах</h5>
+                <p>В качестве индекса массива может использоваться не только числовой литерал, но и значение регистра, переменной или компонента вектора.</p>
+                <pre>mov r1, 3
+mov scores[r1], 75    ; scores[3] = 75
+mov r2, scores[r1]    ; r2 = scores[3]
+
+; Использование координаты вектора как индекса
+vec2 pointer
+mov pointer.x, 5
+mov scores[pointer.x], 100  ; scores[5] = 100</pre>
+
+                <h4>2.5. Преобразование типов</h4>
+                <p>NEM Assembly выполняет неявное преобразование типов при выполнении арифметических операций. Преобразования осуществляются по следующим правилам:</p>
+                <ul>
+                    <li>При операции с двумя разными числовыми типами результат приводится к более точному типу (byte → short → float → double).</li>
+                    <li>При присваивании значения переменной выполняется преобразование к типу целевой переменной с возможной потерей точности.</li>
+                    <li>При помещении числа в регистр оно всегда преобразуется в double (регистры хранят числа в формате double).</li>
+                    <li>Строковые типы не преобразуются в числовые автоматически (требуется явный ввод через inp).</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Примечание.</strong> При преобразовании вещественного числа в целое (например, double в byte) дробная часть отбрасывается без округления. Контроль переполнения целочисленных типов возлагается на разработчика.
+                </div>
+
+                <h4>2.6. Управление памятью</h4>
+                <p>Каждое объявление переменной или массива увеличивает счётчик использованной оперативной памяти (RAM). Текущее состояние памяти можно контролировать через системный монитор. При превышении лимита в 262144 байта выполнение программы аварийно завершается.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Тип данных</th>
+                            <th>Потребление памяти</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Регистры</td>
+                            <td>Не потребляют RAM (хранятся в процессоре)</td>
+                        </tr>
+                        <tr>
+                            <td>byte</td>
+                            <td>1 байт + имя переменной в таблице символов</td>
+                        </tr>
+                        <tr>
+                            <td>short</td>
+                            <td>2 байта</td>
+                        </tr>
+                        <tr>
+                            <td>float</td>
+                            <td>4 байта</td>
+                        </tr>
+                        <tr>
+                            <td>double</td>
+                            <td>8 байт</td>
+                        </tr>
+                        <tr>
+                            <td>string</td>
+                            <td>длина строки в байтах</td>
+                        </tr>
+                        <tr>
+                            <td>vec2</td>
+                            <td>16 байт</td>
+                        </tr>
+                        <tr>
+                            <td>vec3</td>
+                            <td>24 байта</td>
+                        </tr>
+                        <tr>
+                            <td>vec4</td>
+                            <td>32 байта</td>
+                        </tr>
+                        <tr>
+                            <td>byte[n]</td>
+                            <td>n байт</td>
+                        </tr>
+                        <tr>
+                            <td>short[n]</td>
+                            <td>n × 2 байт</td>
+                        </tr>
+                        <tr>
+                            <td>float[n]</td>
+                            <td>n × 4 байт</td>
+                        </tr>
+                        <tr>
+                            <td>double[n]</td>
+                            <td>n × 8 байт</td>
+                        </tr>
+                        <tr>
+                            <td>string[n]</td>
+                            <td>сумма длин всех строк + n байт (для нуль-терминаторов)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Для освобождения памяти используется инструкция <code>clear</code>, которая удаляет переменную и возвращает занимаемую ей память в пул свободных ресурсов.</p>
+                
+                <hr>
+                <p style="text-align: right; color: #666;"><em>Конец раздела 2.</em></p>
+            </section>
+
+            <section id="vectors">
+                <h3>3. Векторы и структуры в NEM</h3>
+                
+                <p>Векторные типы данных представляют собой основу для выполнения геометрических и физических расчётов в NEM Assembly. В отличие от простых скалярных типов, векторы позволяют оперировать многомерными данными как единым целым, что существенно упрощает разработку игровой логики и математических алгоритмов.</p>
+                
+                <h4>3.1. Концепция векторных типов</h4>
+                <p>Вектор в NEM — это структура, содержащая от двух до четырёх координат типа double. Все координаты хранятся с двойной точностью для обеспечения максимальной точности вычислений. Векторы могут представлять:</p>
+                <ul>
+                    <li><strong>Позиции объектов</strong> в двухмерном или трёхмерном пространстве.</li>
+                    <li><strong>Направления и скорости</strong> движения.</li>
+                    <li><strong>Силы и ускорения</strong> в физических расчётах.</li>
+                    <li><strong>Цвета в формате RGBA</strong> (vec4 с компонентами red, green, blue, alpha).</li>
+                    <li><strong>Кватернионы</strong> для представления вращений (vec4).</li>
+                </ul>
+                
+                <div class="note">
+                    <strong>Примечание.</strong> Все векторные операции выполняются покомпонентно. Это означает, что при сложении двух векторов соответствующие координаты складываются независимо друг от друга.
+                </div>
+                
+                <h4>3.2. Объявление и инициализация векторов</h4>
+                <p>Векторы объявляются с использованием директив <code>vec2</code>, <code>vec3</code> или <code>vec4</code>. При создании все координаты автоматически инициализируются нулями. Для присваивания значений отдельным координатам используется инструкция <code>mov</code> с точечной нотацией.</p>
+                
+                <pre>; Объявление векторов
+vec2 position         ; position.x = 0, position.y = 0
+vec3 velocity         ; velocity.x = 0, velocity.y = 0, velocity.z = 0
+vec4 color            ; color.x = 0, color.y = 0, color.z = 0, color.w = 0
+
+; Инициализация координат
+mov position.x, 10.5
+mov position.y, -3.2
+mov velocity.x, 5.0
+mov velocity.y, 2.5
+mov velocity.z, 0.0
+mov color.x, 255      ; Красный компонент (R)
+mov color.y, 128      ; Зелёный компонент (G)
+mov color.z, 64       ; Синий компонент (B)
+mov color.w, 255      ; Прозрачность (A)</pre>
+
+                <h4>3.3. Арифметические операции с векторами</h4>
+                <p>Над векторами могут выполняться все стандартные арифметические операции: сложение, вычитание, умножение и деление. Операции применяются покомпонентно ко всем координатам вектора.</p>
+                
+                <h5>3.3.1. Сложение и вычитание векторов</h5>
+                <pre>vec2 a, b
+mov a.x, 10
+mov a.y, 20
+mov b.x, 5
+mov b.y, 7
+
+add a, b              ; a.x = 15, a.y = 27
+sub a, b              ; a.x = 10, a.y = 20 (после вычитания)</pre>
+
+                <h5>3.3.2. Умножение и деление вектора на скаляр</h5>
+                <p>При умножении или делении вектора на число операция применяется к каждой координате.</p>
+                <pre>vec3 scale
+mov scale.x, 2
+mov scale.y, 4
+mov scale.z, 6
+
+mul scale, 2          ; scale.x = 4, scale.y = 8, scale.z = 12
+div scale, 4          ; scale.x = 1, scale.y = 2, scale.z = 3</pre>
+
+                <h5>3.3.3. Операции с отдельными координатами</h5>
+                <p>Для работы с конкретной координатой вектора используется точечная нотация. Это позволяет выполнять арифметические операции над отдельными компонентами.</p>
+                <pre>vec2 point
+mov point.x, 100
+mov point.y, 200
+
+add point.x, 50       ; point.x = 150
+sub point.y, 30       ; point.y = 170
+mul point.x, 2        ; point.x = 300
+div point.y, 10       ; point.y = 17</pre>
+
+                <h4>3.4. Специализированные векторные операции</h4>
+                <p>NEM Assembly предоставляет набор встроенных инструкций для выполнения операций, специфичных для векторной математики.</p>
+                
+                <h5>3.4.1. Вычисление расстояния между векторами (dst)</h5>
+                <p>Инструкция <code>dst</code> вычисляет евклидово расстояние между двумя векторами одинаковой размерности. Результат сохраняется в регистре <code>rvc</code>.</p>
+                
+                <p>Формула вычисления расстояния для двумерных векторов:</p>
+                <pre class="math">distance = √[(x₂ - x₁)² + (y₂ - y₁)²]</pre>
+                
+                <p>Для трёхмерных векторов:</p>
+                <pre class="math">distance = √[(x₂ - x₁)² + (y₂ - y₁)² + (z₂ - z₁)²]</pre>
+                
+                <p>Для четырёхмерных векторов:</p>
+                <pre class="math">distance = √[(x₂ - x₁)² + (y₂ - y₁)² + (z₂ - z₁)² + (w₂ - w₁)²]</pre>
+                
+                <pre>; Пример вычисления расстояния между двумя точками
+vec2 p1, p2
+mov p1.x, 10
+mov p1.y, 20
+mov p2.x, 30
+mov p2.y, 40
+
+dst p1, p2            ; rvc = √[(30-10)² + (40-20)²] = √(400 + 400) = √800 ≈ 28.284
+out rvc, 1            ; Вывод результата</pre>
+
+                <h5>3.4.2. Вычисление длины вектора (lng)</h5>
+                <p>Инструкция <code>lng</code> вычисляет длину (модуль) вектора. Результат сохраняется в указанном регистре или переменной.</p>
+                
+                <p>Формула длины для вектора любой размерности:</p>
+                <pre class="math">|v| = √(x² + y² + z² + ...)</pre>
+                
+                <pre>; Пример вычисления длины вектора
+vec3 direction
+mov direction.x, 3
+mov direction.y, 4
+mov direction.z, 12
+
+lng r1, direction     ; r1 = √(9 + 16 + 144) = √169 = 13
+out r1, 1</pre>
+
+                <h5>3.4.3. Вычисление квадрата длины вектора (lngsq)</h5>
+                <p>Инструкция <code>lngsq</code> вычисляет квадрат длины вектора. Эта операция выполняется быстрее, чем вычисление длины, так как не требует извлечения квадратного корня. Часто используется для сравнения расстояний, когда точное значение не требуется.</p>
+                
+                <pre>; Пример вычисления квадрата длины
+vec2 point
+mov point.x, 5
+mov point.y, 12
+
+lngsq r1, point       ; r1 = 5² + 12² = 25 + 144 = 169
+out r1, 1</pre>
+
+                <div class="note">
+                    <strong>Рекомендация.</strong> При множественных сравнениях расстояний (например, в алгоритмах поиска ближайшего объекта) используйте <code>lngsq</code> вместо <code>lng</code> для повышения производительности, так как извлечение квадратного корня — ресурсоёмкая операция.
+                </div>
+
+                <h5>3.4.4. Покомпонентные математические функции</h5>
+                <p>Тригонометрические функции (<code>sin</code>, <code>cos</code>, <code>tan</code>) могут применяться как к скалярным значениям, так и к отдельным координатам векторов.</p>
+                
+                <pre>; Применение тригонометрических функций к координатам вектора
+vec2 rotation
+mov rotation.x, 45    ; Угол в градусах
+cos rotation.x, rotation.x  ; rotation.x = cos(45°) ≈ 0.707
+sin rotation.y, 45    ; rotation.y = sin(45°) ≈ 0.707</pre>
+
+                <h4>3.5. Использование векторов в качестве структур</h4>
+                <p>Хотя векторы предназначены в первую очередь для математических операций, они могут использоваться как простые структуры данных для группировки связанных значений. Например, для хранения характеристик игрового объекта:</p>
+                
+                <pre>; Использование vec3 как структуры для хранения характеристик персонажа
+vec3 player_stats
+mov player_stats.x, 100    ; Здоровье (health)
+mov player_stats.y, 50     ; Энергия (energy)
+mov player_stats.z, 25     ; Боеприпасы (ammo)
+
+; Использование vec4 для хранения цвета в формате RGBA
+vec4 pixel_color
+mov pixel_color.x, 255     ; Красный канал
+mov pixel_color.y, 128     ; Зелёный канал
+mov pixel_color.z, 64      ; Синий канал
+mov pixel_color.w, 255     ; Альфа-канал (прозрачность)</pre>
+
+                <h4>3.6. Передача векторов в подпрограммы</h4>
+                <p>Векторы могут передаваться в блоки кода через регистры или глобальные переменные. Поскольку регистры хранят только скалярные значения, для передачи вектора целиком необходимо использовать его имя.</p>
+                
+                <pre>.p calculate_distance:
+    ; Предполагается, что векторы p1 и p2 уже определены глобально
+    dst p1, p2
+    ret
+
+.p main:
+    vec2 p1, p2
+    mov p1.x, 10
+    mov p1.y, 20
+    mov p2.x, 30
+    mov p2.y, 40
+    call calculate_distance
+    out rvc, 1
+    hlt</pre>
+
+                <h4>3.7. Особенности работы с векторами</h4>
+                
+                <h5>3.7.1. Выравнивание в памяти</h5>
+                <p>Все векторные типы выровнены по границе 8 байт, что обеспечивает эффективный доступ к координатам. Это важно учитывать при ручном управлении памятью и создании массивов векторов.</p>
+                
+                <h5>3.7.2. Совместимость типов</h5>
+                <p>Векторы несовместимы со скалярными типами при прямых операциях. Нельзя сложить вектор с числом, используя операцию <code>add</code> без указания координаты. Для применения скалярной операции ко всем координатам необходимо использовать цикл или выполнять операцию над каждой координатой отдельно.</p>
+                
+                <pre>; Неправильно:
+add position, 5       ; Ошибка! Нельзя сложить вектор со скаляром
+
+; Правильно:
+add position.x, 5
+add position.y, 5     ; Для vec2 требуется две операции</pre>
+
+                <h5>3.7.3. Очистка векторов</h5>
+                <p>Для освобождения памяти, занимаемой вектором, используется инструкция <code>clear</code> с именем вектора.</p>
+                
+                <pre>clear position        ; Удаление вектора и освобождение 16 байт памяти</pre>
+
+                <h4>3.8. Примеры практического использования векторов</h4>
+                
+                <h5>3.8.1. Перемещение объекта в двухмерном пространстве</h5>
+                <pre>; Объявление позиции и скорости объекта
+vec2 position
+vec2 velocity
+
+; Инициализация
+mov position.x, 0
+mov position.y, 0
+mov velocity.x, 2
+mov velocity.y, 1
+
+; Цикл перемещения (10 итераций)
+mov r1, 10
+.p loop:
+    add position, velocity
+    sub r1, 1
+    cmp r1, 0
+    ifh, go loop
+
+; Результат: position.x = 20, position.y = 10</pre>
+
+                <h5>3.8.2. Проверка коллизии двух объектов</h5>
+                <pre>vec2 obj1, obj2
+mov obj1.x, 15
+mov obj1.y, 25
+mov obj2.x, 18
+mov obj2.y, 28
+
+; Вычисление расстояния между объектами
+dst obj1, obj2
+
+; Проверка, находятся ли объекты в радиусе 5 единиц
+cmp rvc, 5
+ifl, go collision_detected</pre>
+
+                <h5>3.8.3. Нормализация вектора</h5>
+                <pre>vec3 direction
+mov direction.x, 3
+mov direction.y, 4
+mov direction.z, 0
+
+; Вычисление длины
+lng r1, direction     ; r1 = 5
+
+; Нормализация (деление каждой координаты на длину)
+div direction.x, r1
+div direction.y, r1
+div direction.z, r1   ; direction теперь единичный вектор (0.6, 0.8, 0)</pre>
+
+                <h4>3.9. Ограничения и предостережения</h4>
+                <ul>
+                    <li><strong>Нет проверки выхода за пределы.</strong> При работе с векторами не выполняется проверка на переполнение координат. Разработчик должен самостоятельно контролировать, чтобы значения не выходили за допустимые пределы типа double.</li>
+                    <li><strong>Производительность.</strong> Операции с векторами выполняются интерпретатором последовательно, поэтому для критичных по времени участков кода рекомендуется минимизировать количество векторных операций.</li>
+                    <li><strong>Отсутствие векторного произведения.</strong> В текущей версии NEM Assembly 1.0 не реализованы операции векторного и скалярного произведения векторов. При необходимости эти операции должны вычисляться вручную.</li>
+                </ul>
+                
+                <div class="note">
+                    <strong>Важно.</strong> При использовании векторов в циклах следите за потреблением памяти. Каждый новый вектор увеличивает счётчик RAM. Не забывайте очищать неиспользуемые векторы инструкцией <code>clear</code>.
+                </div>
+                
+                <hr>
+                <p style="text-align: right; color: #666;"><em>Конец раздела 3.</em></p>
+            </section>
+
+            <section id="system-instructions">
+                <h3>4. Системные инструкции NEM</h3>
+                
+                <p>Системные инструкции NEM Assembly обеспечивают взаимодействие программы с виртуальной машиной, управление памятью, вводом-выводом и выполнением кода. Данный раздел содержит полное описание всех системных инструкций, их синтаксиса и особенностей применения.</p>
+                
+                <h4>4.1. Классификация системных инструкций</h4>
+                <p>Все системные инструкции NEM можно разделить на следующие категории:</p>
+                <ul>
+                    <li><strong>Инструкции перехода</strong> — управление потоком выполнения (go, call, ret, условные переходы).</li>
+                    <li><strong>Инструкции сравнения</strong> — установка флагов состояния (cmp).</li>
+                    <li><strong>Инструкции ввода-вывода</strong> — взаимодействие с пользователем (out, inp, keyboard.key).</li>
+                    <li><strong>Инструкции управления памятью</strong> — создание и удаление переменных (db, dw, dd, dq, ds, arrb, arrw, arrd, arrq, arrs, clear).</li>
+                    <li><strong>Инструкции стека</strong> — сохранение и восстановление состояния регистров (push, pop, pusha, popa).</li>
+                    <li><strong>Инструкции синхронизации</strong> — задержки и ожидание (wait).</li>
+                    <li><strong>Инструкции завершения</strong> — остановка выполнения (hlt).</li>
+                </ul>
+                
+                <h4>4.2. Инструкции перехода</h4>
+                
+                <h5>4.2.1. Безусловный переход (go)</h5>
+                <p>Инструкция <code>go</code> выполняет безусловный переход на указанную метку. Выполнение программы продолжается с первой инструкции после метки.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>go метка</code></td>
+                            <td>Переход на указанную метку.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre>__start:
+    go main           ; Переход к блоку main
+    out "Это не будет выполнено", 1
+
+.p main:
+    out "Привет, мир!", 1
+    hlt</pre>
+
+                <h5>4.2.2. Вызов подпрограммы (call)</h5>
+                <p>Инструкция <code>call</code> выполняет переход на указанную метку с сохранением адреса возврата во внутреннем стеке. Возврат осуществляется инструкцией <code>ret</code>.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>call метка</code></td>
+                            <td>Вызов подпрограммы с сохранением адреса возврата.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre>__start:
+    call subroutine   ; Вызов подпрограммы
+    out "Возврат в main", 1
+    hlt
+
+.p subroutine:
+    out "Выполняется подпрограмма", 1
+    ret               ; Возврат в точку вызова</pre>
+
+                <h5>4.2.3. Возврат из подпрограммы (ret)</h5>
+                <p>Инструкция <code>ret</code> выполняет возврат в точку вызова после инструкции <code>call</code>. Если стек вызовов пуст, выполнение переходит к метке <code>__stop</code>.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>ret</code></td>
+                            <td>Возврат из подпрограммы.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h5>4.2.4. Условные переходы</h5>
+                <p>Условные переходы выполняются только при выполнении соответствующего условия, установленного предыдущей инструкцией <code>cmp</code>.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Инструкция</th>
+                            <th>Условие</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>ife</code></td>
+                            <td>равно (equal)</td>
+                            <td>Переход, если значения равны.</td>
+                        </tr>
+                        <tr>
+                            <td><code>ifn</code></td>
+                            <td>не равно (not equal)</td>
+                            <td>Переход, если значения не равны.</td>
+                        </tr>
+                        <tr>
+                            <td><code>ifl</code></td>
+                            <td>меньше (low)</td>
+                            <td>Переход, если первое значение меньше второго.</td>
+                        </tr>
+                        <tr>
+                            <td><code>ifh</code></td>
+                            <td>больше (high)</td>
+                            <td>Переход, если первое значение больше второго.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Синтаксис условных переходов: <code>ifX go метка</code> или <code>ifX call метка</code>.</p>
+                
+                <pre>; Пример использования условных переходов
+mov r1, 10
+mov r2, 20
+cmp r1, r2            ; Сравнение r1 и r2
+ifl, go less          ; Переход, если r1 < r2
+ifh, go greater       ; Переход, если r1 > r2
+ife, go equal         ; Переход, если r1 = r2</pre>
+
+                <h4>4.3. Инструкции сравнения</h4>
+                
+                <h5>4.3.1. Сравнение значений (cmp)</h5>
+                <p>Инструкция <code>cmp</code> сравнивает два значения и устанавливает флаги <code>isEqual</code> и <code>isHigh</code>, которые используются последующими условными переходами.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>cmp операнд1, операнд2</code></td>
+                            <td>Сравнение двух операндов.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>В качестве операндов могут выступать:</p>
+                <ul>
+                    <li>Регистры (r1-r5, rnd, rnr, rvc).</li>
+                    <li>Переменные любого типа (byte, short, float, double, string).</li>
+                    <li>Элементы массивов.</li>
+                    <li>Числовые и строковые литералы.</li>
+                </ul>
+                
+                <pre>; Примеры сравнения
+cmp r1, 100           ; Сравнение регистра с числом
+cmp player.x, target.x ; Сравнение координат векторов
+cmp scores[5], r2     ; Сравнение элемента массива с регистром
+cmp name, "admin"     ; Сравнение строковой переменной с литералом</pre>
+
+                <div class="note">
+                    <strong>Особенности сравнения строк.</strong> При сравнении строковых переменных с числами сравнивается длина строки с числовым значением. При сравнении двух строк выполняется лексикографическое сравнение.
+                </div>
+
+                <h4>4.4. Инструкции ввода-вывода</h4>
+                
+                <h5>4.4.1. Вывод данных (out)</h5>
+                <p>Инструкция <code>out</code> выполняет вывод значения в консоль. Второй аргумент определяет количество символов новой строки после вывода.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>out значение, количество_строк</code></td>
+                            <td>Вывод значения с указанным количеством переводов строки.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Значение может быть:</p>
+                <ul>
+                    <li>Строковым литералом (<code>"текст"</code>).</li>
+                    <li>Регистром.</li>
+                    <li>Переменной любого типа.</li>
+                    <li>Элементом массива.</li>
+                    <li>Компонентом вектора (<code>player.x</code>).</li>
+                    <li>Вектором целиком (вывод всех координат).</li>
+                </ul>
+                
+                <pre>; Примеры вывода
+out "Hello, World!", 1        ; Вывод строки с переводом строки
+out r1, 0                     ; Вывод значения регистра без перевода строки
+out player, 2                 ; Вывод всех координат вектора с двумя переводами
+out scores[5], 1              ; Вывод элемента массива
+out "Результат: ", 0          
+out rvc, 1                    ; Составной вывод</pre>
+
+                <h5>4.4.2. Ввод данных (inp)</h5>
+                <p>Инструкция <code>inp</code> считывает строку, введённую пользователем, и преобразует её к типу целевой переменной или регистра.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>inp переменная</code></td>
+                            <td>Ввод значения с клавиатуры.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Примеры ввода
+inp r1                ; Ввод числа в регистр r1
+inp name              ; Ввод строки в переменную name
+inp player.x          ; Ввод числа в координату X вектора
+inp scores[0]         ; Ввод числа в первый элемент массива</pre>
+
+                <div class="note">
+                    <strong>Важно.</strong> При вводе в числовые переменные строка автоматически преобразуется в число. Если преобразование невозможно, в переменную записывается 0.
+                </div>
+
+                <h5>4.4.3. Системная переменная keyboard.key</h5>
+                <p>Специальная системная переменная <code>keyboard.key</code> содержит код последней нажатой клавиши. Обновляется асинхронно в реальном времени.</p>
+                
+                <pre>; Пример отслеживания нажатия клавиши
+.p loop:
+    out keyboard.key, 1       ; Вывод кода нажатой клавиши
+    wait 100                  ; Задержка 100 мс
+    go loop</pre>
+
+                <h4>4.5. Инструкции управления памятью</h4>
+                
+                <h5>4.5.1. Создание скалярных переменных</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Инструкция</th>
+                            <th>Тип</th>
+                            <th>Размер</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>db</code></td>
+                            <td>byte</td>
+                            <td>1 байт</td>
+                            <td><code>db counter, 100</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>dw</code></td>
+                            <td>short</td>
+                            <td>2 байта</td>
+                            <td><code>dw health, 1000</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>dd</code></td>
+                            <td>float</td>
+                            <td>4 байта</td>
+                            <td><code>dd speed, 12.5</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>dq</code></td>
+                            <td>double</td>
+                            <td>8 байт</td>
+                            <td><code>dq pi, 3.14159</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>ds</code></td>
+                            <td>string</td>
+                            <td>длина строки</td>
+                            <td><code>ds name, "Player"</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h5>4.5.2. Создание массивов</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Инструкция</th>
+                            <th>Тип</th>
+                            <th>Размер элемента</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>arrb</code></td>
+                            <td>byte[]</td>
+                            <td>1 байт</td>
+                            <td><code>arrb scores, 10</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>arrw</code></td>
+                            <td>short[]</td>
+                            <td>2 байта</td>
+                            <td><code>arrw positions, 20</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>arrd</code></td>
+                            <td>float[]</td>
+                            <td>4 байта</td>
+                            <td><code>arrd coefficients, 15</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>arrq</code></td>
+                            <td>double[]</td>
+                            <td>8 байт</td>
+                            <td><code>arrq matrix, 8</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>arrs</code></td>
+                            <td>string[]</td>
+                            <td>переменный</td>
+                            <td><code>arrs messages, 5</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h5>4.5.3. Удаление переменных (clear)</h5>
+                <p>Инструкция <code>clear</code> удаляет переменную, массив или вектор, освобождая занимаемую память. Также может использоваться для очистки регистров или экрана.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>clear имя_переменной</code></td>
+                            <td>Удаление переменной.</td>
+                        </tr>
+                        <tr>
+                            <td><code>clear registres</code></td>
+                            <td>Очистка всех регистров (установка в 0).</td>
+                        </tr>
+                        <tr>
+                            <td><code>clear screen</code></td>
+                            <td>Очистка экрана консоли.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Примеры использования clear
+clear player          ; Удаление вектора player
+clear scores          ; Удаление массива scores
+clear registres       ; Обнуление всех регистров
+clear screen          ; Очистка консоли</pre>
+
+                <h4>4.6. Инструкции стека</h4>
+                <p>Стек регистров позволяет временно сохранять состояние регистров и восстанавливать его позднее. Это особенно полезно в подпрограммах, где требуется сохранить вызывающую среду.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Инструкция</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>push регистр</code></td>
+                            <td>Сохранить значение указанного регистра в стек.</td>
+                        </tr>
+                        <tr>
+                            <td><code>pop регистр</code></td>
+                            <td>Восстановить значение регистра из стека.</td>
+                        </tr>
+                        <tr>
+                            <td><code>pusha</code></td>
+                            <td>Сохранить все регистры в стек.</td>
+                        </tr>
+                        <tr>
+                            <td><code>popa</code></td>
+                            <td>Восстановить все регистры из стека.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Пример использования стека
+.p subroutine:
+    pusha                     ; Сохранить все регистры
+    mov r1, 404                 ; Изменение регистров в подпрограмме
+    mov r2, 100
+    ; ... работа с регистрами ...
+    popa                      ; Восстановить исходные значения регистров
+    ret</pre>
+
+                <h4>4.7. Инструкции синхронизации</h4>
+                
+                <h5>4.7.1. Задержка (wait)</h5>
+                <p>Инструкция <code>wait</code> приостанавливает выполнение программы на указанное количество миллисекунд.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>wait миллисекунды</code></td>
+                            <td>Задержка выполнения.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Пример использования задержки
+out "Старт", 1
+wait 1000             ; Задержка 1 секунда
+out "Прошла 1 секунда", 1</pre>
+
+                <h4>4.8. Инструкции завершения</h4>
+                
+                <h5>4.8.1. Остановка выполнения (hlt)</h5>
+                <p>Инструкция <code>hlt</code> (halt) немедленно прекращает выполнение программы и передаёт управление блоку <code>__stop</code>.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>hlt</code></td>
+                            <td>Остановка выполнения.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Пример использования hlt
+__start:
+    mov r1, 100
+    cmp r1, 100
+    ife, error
+    out "Всё хорошо", 1
+    hlt
+
+.p error:
+    out "Ошибка", 1
+    hlt</pre>
+
+                <h4>4.9. Специальные тестовые инструкции</h4>
+                <p>Для отладки программ предусмотрены специальные тестовые инструкции, которые не рекомендуется использовать в рабочем коде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Инструкция</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>tst_cmp_</code></td>
+                            <td>Вывод состояния флагов сравнения (isHigh, isEqual).</td>
+                        </tr>
+                        <tr>
+                            <td><code>tst_vars_</code></td>
+                            <td>Вывод списка всех активных переменных.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>4.10. Коды ошибок</h4>
+                <p>При возникновении ошибок интерпретатор выводит сообщение с кодом ошибки и номером строки.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Код</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>0x00</code></td>
+                            <td>Инструкция не найдена.</td>
+                        </tr>
+                        <tr>
+                            <td><code>0x01</code></td>
+                            <td>Адрес не существует (обращение к несуществующей переменной).</td>
+                        </tr>
+                        <tr>
+                            <td><code>0x02</code></td>
+                            <td>Неверное количество аргументов.</td>
+                        </tr>
+                        <tr>
+                            <td><code>0x03</code></td>
+                            <td>Неверное имя блока.</td>
+                        </tr>
+                        <tr>
+                            <td><code>0x04</code></td>
+                            <td>Неверные аргументы инструкции.</td>
+                        </tr>
+                        <tr>
+                            <td><code>0x05</code></td>
+                            <td>Повторное определение символа.</td>
+                        </tr>
+                        <tr>
+                            <td><code>0x06</code></td>
+                            <td>Ошибка сегментации (нарушение доступа к памяти).</td>
+                        </tr>
+                        <tr>
+                            <td><code>0x07</code></td>
+                            <td>Ошибка типизации.</td>
+                        </tr>
+                        <tr>
+                            <td><code>0x08</code></td>
+                            <td>Некорректное имя адреса.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="note">
+                    <strong>Примечание.</strong> При возникновении любой ошибки выполнение программы немедленно прекращается. Для продолжения работы необходимо исправить ошибку в исходном коде.
+                </div>
+                
+                <hr>
+                <p style="text-align: right; color: #666;"><em>Конец раздела 4.</em></p>
+            </section>
+
+            <section id="math-instructions">
+                <h3>5. Арифметические и математические инструкции NEM</h3>
+                
+                <p>Арифметические и математические инструкции составляют основу вычислительной мощности NEM Assembly. Они позволяют выполнять операции с числами, векторами, массивами и обеспечивают поддержку тригонометрических функций, статистических вычислений и генерации случайных чисел.</p>
+                
+                <h4>5.1. Классификация арифметических инструкций</h4>
+                <p>Все математические инструкции NEM можно разделить на следующие категории:</p>
+                <ul>
+                    <li><strong>Базовые арифметические операции</strong> — сложение, вычитание, умножение, деление (add, sub, mul, div).</li>
+                    <li><strong>Тригонометрические функции</strong> — синус, косинус, тангенс (sin, cos, tan).</li>
+                    <li><strong>Статистические операции</strong> — поиск минимума и максимума в массивах (min, max).</li>
+                    <li><strong>Генерация случайных чисел</strong> — rand.</li>
+                    <li><strong>Операции с массивами</strong> — сортировка (srt).</li>
+                    <li><strong>Строковые операции</strong> — вычисление длины строки (len).</li>
+                </ul>
+                
+                <h4>5.2. Базовые арифметические операции</h4>
+                
+                <h5>5.2.1. Сложение (add)</h5>
+                <p>Инструкция <code>add</code> выполняет сложение первого операнда со вторым. Результат сохраняется в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>add операнд1, операнд2</code></td>
+                            <td>операнд1 = операнд1 + операнд2</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Операндами могут быть:</p>
+                <ul>
+                    <li>Регистры (r1-r5, rnd, rnr, rvc).</li>
+                    <li>Переменные всех числовых типов (byte, short, float, double).</li>
+                    <li>Элементы массивов.</li>
+                    <li>Компоненты векторов (player.x).</li>
+                    <li>Векторы целиком (покомпонентное сложение).</li>
+                    <li>Строковые переменные (конкатенация).</li>
+                    <li>Числовые и строковые литералы.</li>
+                </ul>
+                
+                <pre>; Примеры сложения
+add r1, 5             ; r1 = r1 + 5
+add r1, r2            ; r1 = r1 + r2
+add health, 10        ; health = health + 10
+add player.x, r3      ; player.x = player.x + r3
+add position, velocity ; Покомпонентное сложение векторов
+add message, "!"      ; Конкатенация строк: message = message + "!"</pre>
+
+                <h5>5.2.2. Вычитание (sub)</h5>
+                <p>Инструкция <code>sub</code> выполняет вычитание второго операнда из первого. Результат сохраняется в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>sub операнд1, операнд2</code></td>
+                            <td>операнд1 = операнд1 - операнд2</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Вычитание поддерживается для всех числовых типов и векторов. Для строковых типов операция недопустима.</p>
+                
+                <pre>; Примеры вычитания
+sub r1, 5             ; r1 = r1 - 5
+sub r1, r2            ; r1 = r1 - r2
+sub health, damage    ; health = health - damage
+sub position, offset   ; Покомпонентное вычитание векторов</pre>
+
+                <h5>5.2.3. Умножение (mul)</h5>
+                <p>Инструкция <code>mul</code> выполняет умножение первого операнда на второй. Результат сохраняется в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>mul операнд1, операнд2</code></td>
+                            <td>операнд1 = операнд1 × операнд2</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Умножение поддерживается для всех числовых типов и векторов (умножение вектора на скаляр). Для строковых типов операция недопустима.</p>
+                
+                <pre>; Примеры умножения
+mul r1, 5             ; r1 = r1 × 5
+mul r1, r2            ; r1 = r1 × r2
+mul speed, coefficient ; speed = speed × coefficient
+mul position, 2       ; Умножение всех координат вектора на 2</pre>
+
+                <h5>5.2.4. Деление (div)</h5>
+                <p>Инструкция <code>div</code> выполняет деление первого операнда на второй. Результат сохраняется в первом операнде, а остаток от деления автоматически сохраняется в регистре <code>rnr</code>.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>div операнд1, операнд2</code></td>
+                            <td>операнд1 = операнд1 / операнд2; rnr = операнд1 % операнд2</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Деление поддерживается для всех числовых типов и векторов (деление вектора на скаляр). При делении целых чисел остаток сохраняется в <code>rnr</code>. Для вещественных чисел остаток всегда равен 0.</p>
+                
+                <pre>; Примеры деления
+div r1, 5             ; r1 = r1 / 5, rnr = r1 % 5
+div r1, r2            ; r1 = r1 / r2, rnr = r1 % r2
+div position, 2       ; Деление всех координат вектора на 2
+div score, 3          ; Если score = 10, то score = 3, rnr = 1</pre>
+
+                <div class="note">
+                    <strong>Важно.</strong> При делении на ноль возникает ошибка выполнения программы. Разработчик должен гарантировать, что делитель не равен нулю.
+                </div>
+
+                <h4>5.3. Тригонометрические функции</h4>
+                
+                <h5>5.3.1. Косинус (cos)</h5>
+                <p>Инструкция <code>cos</code> вычисляет косинус угла, заданного в градусах. Результат сохраняется в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>cos операнд1, угол</code></td>
+                            <td>операнд1 = cos(угол)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Примеры вычисления косинуса
+cos r1, 60            ; r1 = cos(60°) = 0.5
+cos r1, r2            ; r1 = cos(r2)
+cos player.x, 45      ; player.x = cos(45°)</pre>
+
+                <h5>5.3.2. Синус (sin)</h5>
+                <p>Инструкция <code>sin</code> вычисляет синус угла, заданного в градусах. Результат сохраняется в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>sin операнд1, угол</code></td>
+                            <td>операнд1 = sin(угол)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Примеры вычисления синуса
+sin r1, 30            ; r1 = sin(30°) = 0.5
+sin r1, r2            ; r1 = sin(r2)
+sin player.y, 90      ; player.y = sin(90°) = 1</pre>
+
+                <h5>5.3.3. Тангенс (tan)</h5>
+                <p>Инструкция <code>tan</code> вычисляет тангенс угла, заданного в градусах. Результат сохраняется в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>tan операнд1, угол</code></td>
+                            <td>операнд1 = tan(угол)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Примеры вычисления тангенса
+tan r1, 45            ; r1 = tan(45°) = 1
+tan r1, r2            ; r1 = tan(r2)
+tan direction.x, 30   ; direction.x = tan(30°)</pre>
+
+                <div class="note">
+                    <strong>Примечание.</strong> Все тригонометрические функции работают с углами в градусах. Результат вычисляется с двойной точностью (double).
+                </div>
+
+                <h4>5.4. Статистические операции с массивами</h4>
+                
+                <h5>5.4.1. Поиск максимального элемента (max)</h5>
+                <p>Инструкция <code>max</code> находит максимальный элемент в массиве и сохраняет его в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>max операнд1, массив</code></td>
+                            <td>операнд1 = максимальный элемент массива</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Поддерживаются все типы массивов: byte[], short[], float[], double[], string[]. Для строковых массивов используется лексикографическое сравнение.</p>
+                
+                <pre>; Примеры поиска максимума
+arrb scores, 5
+mov scores[0], 10
+mov scores[1], 25
+mov scores[2], 15
+mov scores[3], 30
+mov scores[4], 20
+
+max r1, scores        ; r1 = 30
+
+arrs names, 3
+mov names[0], "Alice"
+mov names[1], "Bob"
+mov names[2], "Charlie"
+
+max r1, names         ; r1 = длина строки "Charlie" (7)</pre>
+
+                <h5>5.4.2. Поиск минимального элемента (min)</h5>
+                <p>Инструкция <code>min</code> находит минимальный элемент в массиве и сохраняет его в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>min операнд1, массив</code></td>
+                            <td>операнд1 = минимальный элемент массива</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <pre>; Примеры поиска минимума
+arrb scores, 5
+mov scores[0], 10
+mov scores[1], 25
+mov scores[2], 15
+mov scores[3], 30
+mov scores[4], 20
+
+min r1, scores        ; r1 = 10
+
+arrs names, 3
+mov names[0], "Alice"
+mov names[1], "Bob"
+mov names[2], "Charlie"
+
+min r1, names         ; r1 = длина строки "Bob" (3)</pre>
+
+                <h4>5.5. Генерация случайных чисел</h4>
+                
+                <h5>5.5.1. Случайное число в диапазоне (rand)</h5>
+                <p>Инструкция <code>rand</code> генерирует случайное целое число в заданном диапазоне и сохраняет его в регистре <code>rnd</code>.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>rand минимум, максимум</code></td>
+                            <td>rnd = случайное число от минимум до максимум</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Границы диапазона включаются в интервал генерации. Могут быть отрицательными.</p>
+                
+                <pre>; Примеры генерации случайных чисел
+rand 1, 100           ; rnd = случайное число от 1 до 100
+rand -50, 50          ; rnd = случайное число от -50 до 50
+
+; Использование случайного числа
+rand 0, 10
+mov player.x, rnd     ; player.x = случайное число от 0 до 10</pre>
+
+                <h4>5.6. Операции с массивами</h4>
+                
+                <h5>5.6.1. Сортировка массива (srt)</h5>
+                <p>Инструкция <code>srt</code> выполняет сортировку массива по возрастанию.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>srt массив</code></td>
+                            <td>Сортировка массива по возрастанию</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>Поддерживаются все типы массивов. Для строковых массивов выполняется лексикографическая сортировка.</p>
+                
+                <pre>; Пример сортировки массива
+arrb numbers, 5
+mov numbers[0], 404
+mov numbers[1], 15
+mov numbers[2], 8
+mov numbers[3], 23
+mov numbers[4], 4
+
+srt numbers           ; numbers = [4, 8, 15, 23, 404]
+
+; Вывод отсортированного массива
+mov r1, 0
+.p loop:
+    out numbers[r1], 1
+    add r1, 1
+    cmp r1, 5
+    ifl, go loop</pre>
+
+                <h4>5.7. Строковые операции</h4>
+                
+                <h5>5.7.1. Вычисление длины строки (len)</h5>
+                <p>Инструкция <code>len</code> вычисляет длину строки и сохраняет результат в первом операнде.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>len операнд1, строка</code></td>
+                            <td>операнд1 = длина строки</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>В качестве строки может использоваться строковая переменная, строковый литерал или элемент строкового массива.</p>
+                
+                <pre>; Примеры вычисления длины строки
+ds message, "Hello"
+len r1, message       ; r1 = 5
+
+len r2, "World"       ; r2 = 5
+
+arrs words, 2
+mov words[0], "Apple"
+mov words[1], "Banana"
+len r3, words[1]      ; r3 = 6</pre>
+
+                <h4>5.8. Комбинированные операции с регистрами</h4>
+                
+                <h5>5.8.1. Использование специальных регистров</h5>
+                <p>При выполнении арифметических операций автоматически заполняются специальные регистры:</p>
+                <ul>
+                    <li><code>rnd</code> — результат выполнения <code>rand</code>.</li>
+                    <li><code>rnr</code> — остаток от деления при выполнении <code>div</code>.</li>
+                    <li><code>rvc</code> — результат вычисления расстояния <code>dst</code> или длины вектора <code>lng</code>.</li>
+                </ul>
+                
+                <pre>; Пример использования всех специальных регистров
+rand 1, 100           ; rnd = случайное число
+mov r1, 10
+div r1, 3             ; r1 = 3, rnr = 1
+vec2 a, b
+mov a.x, 3
+mov a.y, 4
+lng rvc, a            ; rvc = 5
+out rnd, 0
+out " ", 0
+out rnr, 0
+out " ", 0
+out rvc, 1</pre>
+
+                <h4>5.9. Примеры комплексных математических вычислений</h4>
+                
+                <h5>5.9.1. Вычисление площади круга</h5>
+                <pre>; Программа для вычисления площади круга
+__start:
+    dq radius, 5.0
+    dq pi, 3.14159
+    dq area, 0.0
+    
+    ; area = pi * radius^2
+    mov r1, radius
+    mul r1, r1         ; r1 = radius^2
+    mul r1, pi         ; r1 = pi * radius^2
+    mov area, r1
+    
+    out "Площадь круга: ", 0
+    out area, 1
+    hlt</pre>
+
+                <h5>5.9.2. Решение квадратного уравнения</h5>
+                <pre>; Решение уравнения ax^2 + bx + c = 0
+__start:
+    dq a, 1.0
+    dq b, -5.0
+    dq c, 6.0
+    dq d, 0.0          ; Дискриминант
+    dq x1, 0.0
+    dq x2, 0.0
+    
+    ; Вычисление дискриминанта: d = b^2 - 4ac
+    mov r1, b
+    mul r1, r1         ; r1 = b^2
+    mov r2, 4
+    mul r2, a
+    mul r2, c          ; r2 = 4ac
+    sub r1, r2
+    mov d, r1
+    
+    ; Проверка дискриминанта
+    cmp d, 0
+    ifl, go no_roots
+    ife, go one_root
+    
+    ; Два корня
+    sqrt r1, d         ; r1 = sqrt(d)
+    mov r2, b
+    sub r2, r1         ; r2 = -b + sqrt(d)
+    mov r3, 2
+    mul r3, a
+    div r2, r3
+    mov x1, r2
+    
+    mov r2, b
+    add r2, r1         ; r2 = -b - sqrt(d)  (с учётом знака)
+    mov r3, 2
+    mul r3, a
+    div r2, r3
+    mov x2, r2
+    
+    out "x1 = ", 0
+    out x1, 1
+    out "x2 = ", 0
+    out x2, 1
+    hlt
+
+.p one_root:
+    ; Один корень
+    mov r1, b
+    mov r2, 2
+    mul r2, a
+    div r1, r2
+    out "x = ", 0
+    out r1, 1
+    hlt
+
+.p no_roots:
+    out "Нет действительных корней", 1
+    hlt</pre>
+
+                <div class="note">
+                    <strong>Примечание.</strong> В примере выше используется гипотетическая инструкция <code>sqrt</code>, которая отсутствует в текущей версии NEM Assembly 1.0. Для извлечения квадратного корня необходимо использовать комбинацию <code>lng</code> с вектором или реализовать приближённое вычисление.
+                </div>
+
+                <h5>5.9.3. Статистическая обработка данных</h5>
+                <pre>; Вычисление среднего арифметического и разброса
+__start:
+    arrd data, 10
+    mov data[0], 12.5
+    mov data[1], 14.2
+    mov data[2], 13.8
+    mov data[3], 15.1
+    mov data[4], 11.9
+    mov data[5], 16.3
+    mov data[6], 12.8
+    mov data[7], 14.5
+    mov data[8], 13.2
+    mov data[9], 15.7
+    
+    ; Вычисление суммы
+    mov r1, 0
+    mov r2, 0
+.p loop:
+    add r1, data[r2]
+    add r2, 1
+    cmp r2, 10
+    ifl, loop
+    
+    ; Вычисление среднего
+    div r1, 10         ; r1 = среднее, rnr = остаток
+    out "Среднее: ", 0
+    out r1, 1
+    
+    ; Поиск минимального и максимального
+    min r2, data
+    max r3, data
+    out "Минимум: ", 0
+    out r2, 1
+    out "Максимум: ", 0
+    out r3, 1
+    
+    hlt</pre>
+
+                <h4>5.10. Ограничения и особенности</h4>
+                <ul>
+                    <li><strong>Точность вычислений.</strong> Все математические операции выполняются с двойной точностью (double), однако при сохранении результатов в переменные меньшего размера (byte, short, float) происходит потеря точности.</li>
+                    <li><strong>Остаток от деления.</strong> Регистр <code>rnr</code> перезаписывается при каждой операции <code>div</code>. Если необходимо сохранить остаток, его следует скопировать в другую переменную.</li>
+                    <li><strong>Тригонометрические функции.</strong> Все углы задаются в градусах. Результаты тригонометрических функций находятся в диапазоне [-1, 1].</li>
+                    <li><strong>Случайные числа.</strong> Генератор случайных чисел инициализируется при запуске виртуальной машины. Последовательность случайных чисел недетерминирована.</li>
+                    <li><strong>Сортировка массивов.</strong> Инструкция <code>srt</code> изменяет исходный массив. При необходимости сохранить оригинальные данные следует создать копию массива.</li>
+                </ul>
+                
+                <div class="note">
+                    <strong>Рекомендации по производительности.</strong> Для интенсивных математических расчётов старайтесь использовать регистры вместо переменных, так как доступ к регистрам выполняется быстрее. При работе с большими массивами минимизируйте количество обращений к элементам, используя регистры для временного хранения.
+                </div>
+
+                <h4>5.11. Сводная таблица арифметических инструкций</h4>
+                
+                <table class="instruction-table">
+                    <thead>
+                        <tr>
+                            <th>Инструкция</th>
+                            <th>Описание</th>
+                            <th>Пример</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>add</td>
+                            <td>Сложение</td>
+                            <td><code>add r1, 5</code></td>
+                        </tr>
+                        <tr>
+                            <td>sub</td>
+                            <td>Вычитание</td>
+                            <td><code>sub r1, r2</code></td>
+                        </tr>
+                        <tr>
+                            <td>mul</td>
+                            <td>Умножение</td>
+                            <td><code>mul speed, 2.5</code></td>
+                        </tr>
+                        <tr>
+                            <td>div</td>
+                            <td>Деление (с остатком в rnr)</td>
+                            <td><code>div score, 3</code></td>
+                        </tr>
+                        <tr>
+                            <td>cos</td>
+                            <td>Косинус угла (градусы)</td>
+                            <td><code>cos r1, 60</code></td>
+                        </tr>
+                        <tr>
+                            <td>sin</td>
+                            <td>Синус угла (градусы)</td>
+                            <td><code>sin r1, 30</code></td>
+                        </tr>
+                        <tr>
+                            <td>tan</td>
+                            <td>Тангенс угла (градусы)</td>
+                            <td><code>tan r1, 45</code></td>
+                        </tr>
+                        <tr>
+                            <td>max</td>
+                            <td>Максимальный элемент массива</td>
+                            <td><code>max r1, scores</code></td>
+                        </tr>
+                        <tr>
+                            <td>min</td>
+                            <td>Минимальный элемент массива</td>
+                            <td><code>min r1, scores</code></td>
+                        </tr>
+                        <tr>
+                            <td>rand</td>
+                            <td>Случайное число в диапазоне</td>
+                            <td><code>rand 1, 100</code></td>
+                        </tr>
+                        <tr>
+                            <td>srt</td>
+                            <td>Сортировка массива</td>
+                            <td><code>srt numbers</code></td>
+                        </tr>
+                        <tr>
+                            <td>len</td>
+                            <td>Длина строки</td>
+                            <td><code>len r1, message</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <hr>
+                <p style="text-align: right; color: #666;"><em>Конец раздела 5. Документация NEM Assembly 1.0 завершена.</em></p>
+            </section>
+            <section id="examples">
+                <h3>6. Примеры программ на NEM Assembly</h3>
+                
+                <p>В данном разделе представлены рабочие примеры программ на языке NEM Assembly, демонстрирующие различные возможности языка: от простых арифметических операций до сложной игровой логики. Все примеры могут быть скопированы и выполнены в среде NEM.</p>
+                
+                <h4>6.1. Калькулятор</h4>
+                <p>Программа реализует простейший консольный калькулятор с поддержкой четырёх базовых операций. Пользователь вводит оператор и два числа, программа выводит результат.</p>
+                
+                <pre>;==================================================
+; Калькулятор для NEM Assembly
+; Поддерживает операции: +, -, *, /
+;==================================================
+
+__start:
+    ds operator, ""        ; Переменная для хранения оператора
+    go calc
+
+.p calc:
+    ; Запрос оператора
+    out "Введите оператор (+, -, *, /, q - выход): ", 0
+    inp operator
+    
+    ; Проверка выхода
+    cmp operator, "q"
+    ife, go halt
+    
+    ; Запрос первого числа
+    out "Введите первое число: ", 0
+    inp r1
+    
+    ; Запрос второго числа
+    out "Введите второе число: ", 0
+    inp r2
+    
+    ; Выбор операции
+    cmp operator, "+"
+    ife, go plus
+    
+    cmp operator, "-"
+    ife, go minus
+    
+    cmp operator, "*"
+    ife, go multiply
+    
+    cmp operator, "/"
+    ife, go divide
+    
+    ; Если оператор не распознан
+    out "Неизвестный оператор!", 1
+    go calc
+
+.p plus:
+    add r1, r2
+    go output
+
+.p minus:
+    sub r1, r2
+    go output
+
+.p multiply:
+    mul r1, r2
+    go output
+
+.p divide:
+    div r1, r2           ; r1 = результат, rnr = остаток
+    go output
+
+.p output:
+    out "Результат: ", 0
+    out r1, 1
+    
+    ; Если была операция деления, выводим остаток
+    cmp operator, "/"
+    ifn, go calc
+    out "Остаток: ", 0
+    out rnr, 1
+    go calc
+
+.p halt:
+    out "Работа завершена", 1
+    hlt
+
+__stop:
+    clear operator
+    clear registres</pre>
+
+                <h4>6.2. Бенчмарк производительности</h4>
+                <p>Данная программа выполняет серию арифметических операций в цикле для оценки производительности виртуальной машины. Количество итераций задаётся регистром r2.</p>
+                
+                <pre>;==================================================
+; Бенчмарк для NEM Assembly
+; Выполняет 3 миллиона итераций с арифметикой
+;==================================================
+
+__start:
+    mov r1, 1000         ; Начальное значение
+    mov r2, 3000000      ; Счётчик итераций (3 миллиона)
+
+.p bench_loop:
+    ; Серия арифметических операций
+    div r1, 5
+    mul r1, 5
+    sub r1, 900
+    add r1, 900
+    mul r1, r1
+    mul r1, r1
+    
+    ; Декремент счётчика и проверка условия
+    sub r2, 1
+    cmp r2, 0
+    ifh, go bench_loop  ; Продолжаем, если r2 > 0
+
+__stop:
+    out "Бенчмарк завершён", 1
+    out "Результат: ", 0
+    out r1, 2
+    clear registres</pre>
+
+                <h4>6.3. Игровая логика: перемещение объекта</h4>
+                <p>Пример демонстрирует использование векторов для моделирования движения объекта в двумерном пространстве. Объект движется с постоянной скоростью, а программа выводит его координаты на каждом шаге.</p>
+                
+                <pre>;==================================================
+; Моделирование движения объекта в 2D
+; Объект движется от точки (0,0) к точке (100, 50)
+;==================================================
+
+__start:
+    vec2 position        ; Текущая позиция
+    vec2 target          ; Целевая позиция
+    vec2 direction       ; Направление движения
+    vec2 velocity        ; Вектор скорости
+    
+    ; Инициализация
+    mov position.x, 0
+    mov position.y, 0
+    
+    mov target.x, 100
+    mov target.y, 50
+    
+    ; Вычисление направления к цели
+    mov direction.x, target.x
+    mov direction.y, target.y
+    sub direction, position
+    
+    ; Нормализация направления и установка скорости
+    lng r1, direction    ; r1 = длина вектора направления
+    
+    ; Создание единичного вектора направления
+    mov velocity.x, direction.x
+    mov velocity.y, direction.y
+    div velocity.x, r1
+    div velocity.y, r1
+    
+    ; Установка скорости (5 единиц за шаг)
+    mul velocity.x, 5
+    mul velocity.y, 5
+    
+    ; Основной цикл движения
+    mov r2, 20           ; Количество шагов
+    
+.p loop:
+    ; Вывод текущей позиции
+    out "Позиция: X=", 0
+    out position.x, 0
+    out " Y=", 0
+    out position.y, 1
+    
+    ; Обновление позиции
+    add position, velocity
+    
+    ; Декремент счётчика
+    sub r2, 1
+    cmp r2, 0
+    ifh, go loop
+    
+    ; Вывод финальной позиции
+    out "Конечная позиция: X=", 0
+    out position.x, 0
+    out " Y=", 0
+    out position.y, 2
+    
+__stop:
+    clear position
+    clear target
+    clear direction
+    clear velocity
+    clear registres</pre>
+
+                <h4>7.4. Обработка массива данных</h4>
+                <p>Программа демонстрирует работу с массивами: заполнение случайными числами, сортировку, поиск минимального и максимального элемента, вычисление среднего арифметического.</p>
+                
+                <pre>;==================================================
+; Статистическая обработка массива
+;==================================================
+
+__start:
+    arrd data, 20        ; Массив из 20 элементов
+    mov r1, 0            ; Счётчик для цикла
+    
+    ; Заполнение массива случайными числами от 0 до 100
+.p fill_loop:
+    rand 0, 100
+    mov data[r1], rnd
+    add r1, 1
+    cmp r1, 20
+    ifl, go fill_loop
+    
+    ; Вывод исходного массива
+    out "Исходный массив:", 1
+    mov r1, 0
+.p print_loop:
+    out data[r1], 0
+    out " ", 0
+    add r1, 1
+    cmp r1, 20
+    ifl, go print_loop
+    out "", 2
+    
+    ; Сортировка массива
+    srt data
+    
+    ; Вывод отсортированного массива
+    out "Отсортированный массив:", 1
+    mov r1, 0
+.p print_sorted:
+    out data[r1], 0
+    out " ", 0
+    add r1, 1
+    cmp r1, 20
+    ifl, go print_sorted
+    out "", 2
+    
+    ; Поиск минимума и максимума
+    min r1, data
+    max r2, data
+    out "Минимальный элемент: ", 0
+    out r1, 1
+    out "Максимальный элемент: ", 0
+    out r2, 1
+    
+    ; Вычисление среднего арифметического
+    mov r1, 0            ; Сумма
+    mov r2, 0            ; Счётчик
+.p sum_loop:
+    add r1, data[r2]
+    add r2, 1
+    cmp r2, 20
+    ifl, go sum_loop
+    
+    div r1, 20           ; r1 = среднее, rnr = остаток
+    out "Среднее арифметическое: ", 0
+    out r1, 1
+    out "Остаток от деления суммы: ", 0
+    out rnr, 2
+    
+__stop:
+    clear data
+    clear registres</pre>
+
+                <h4>6.5. Проверка коллизий</h4>
+                <p>Программа моделирует проверку столкновений между движущимся объектом и статическими препятствиями с использованием векторных расстояний.</p>
+                
+                <pre>;==================================================
+; Проверка коллизий в двумерном пространстве
+;==================================================
+
+__start:
+    vec2 player          ; Позиция игрока
+    arrb obstacles, 5    ; Массив препятствий (индексы)
+    
+    ; Инициализация препятствий (векторы)
+    vec2 obs0, obs1, obs2, obs3, obs4
+    
+    ; Координаты препятствий
+    mov obs0.x, 10
+    mov obs0.y, 10
+    
+    mov obs1.x, 25
+    mov obs1.y, 30
+    
+    mov obs2.x, 40
+    mov obs2.y, 15
+    
+    mov obs3.x, 60
+    mov obs3.y, 45
+    
+    mov obs4.x, 80
+    mov obs4.y, 20
+    
+    ; Начальная позиция игрока
+    mov player.x, 0
+    mov player.y, 0
+    
+    ; Параметры движения
+    mov r5, 10           ; Количество шагов
+    mov r4, 15           ; Радиус коллизии
+    
+    out "=== СИМУЛЯЦИЯ КОЛЛИЗИЙ ===", 2
+    
+.p move_loop:
+    ; Вывод текущей позиции
+    out "Игрок: X=", 0
+    out player.x, 0
+    out " Y=", 0
+    out player.y, 1
+    
+    ; Проверка коллизий со всеми препятствиями
+    mov r1, 0            ; Индекс препятствия
+    
+.p check_collisions:
+    ; Загрузка координат препятствия
+    cmp r1, 0
+    ife, go load_obs0
+    cmp r1, 1
+    ife, go load_obs1
+    cmp r1, 2
+    ife, go load_obs2
+    cmp r1, 3
+    ife, go load_obs3
+    cmp r1, 4
+    ife, go load_obs4
+    go next_step
+
+.p load_obs0:
+    dst player, obs0
+    go check_distance
+.p load_obs1:
+    dst player, obs1
+    go check_distance
+.p load_obs2:
+    dst player, obs2
+    go check_distance
+.p load_obs3:
+    dst player, obs3
+    go check_distance
+.p load_obs4:
+    dst player, obs4
+    go check_distance
+
+.p check_distance:
+    cmp rvc, r4
+    ifl, go collision_detected
+    add r1, 1
+    cmp r1, 5
+    ifl, go check_collisions
+    go next_step
+
+.p collision_detected:
+    out "⚠ КОЛЛИЗИЯ с препятствием ", 0
+    out r1, 1
+    go next_step
+
+.p next_step:
+    ; Перемещение игрока
+    add player.x, 8
+    add player.y, 5
+    
+    sub r5, 1
+    cmp r5, 0
+    ifh, go move_loop
+
+.p end:
+    out "", 1
+    out "Симуляция завершена", 2
+
+__stop:
+    clear player
+    clear obs0
+    clear obs1
+    clear obs2
+    clear obs3
+    clear obs4
+    clear obstacles
+    clear registres</pre>
+
+                <h4>6.6. Использование стека регистров</h4>
+                <p>Пример демонстрирует работу со стеком регистров для сохранения и восстановления состояния между подпрограммами.</p>
+                
+                <pre>;==================================================
+; Сохранение контекста с использованием стека
+;==================================================
+
+__start:
+    go main
+
+.p subroutine:
+    ; Сохраняем все регистры
+    pusha
+    
+    ; Работаем с регистрами в подпрограмме
+    mov r1, 404
+    mov r2, 100
+    mov r3, 500
+    out "Внутри подпрограммы: r1=", 0
+    out r1, 0
+    out " r2=", 0
+    out r2, 0
+    out " r3=", 0
+    out r3, 1
+    
+    ; Восстанавливаем исходные значения
+    popa
+    ret
+
+.p main:
+    ; Устанавливаем значения регистров
+    mov r1, 10
+    mov r2, 20
+    mov r3, 30
+    
+    out "До вызова: r1=", 0
+    out r1, 0
+    out " r2=", 0
+    out r2, 0
+    out " r3=", 0
+    out r3, 1
+    
+    ; Вызываем подпрограмму
+    call subroutine
+    
+    out "После возврата: r1=", 0
+    out r1, 0
+    out " r2=", 0
+    out r2, 0
+    out " r3=", 0
+    out r3, 2
+    
+    hlt
+
+__stop:
+    clear registres</pre>
+
+                <div class="note">
+                    <strong>Примечание.</strong> Все примеры могут быть скопированы непосредственно в файлы с расширением <code>.n</code> или <code>.nem</code> и выполнены командой <code>run</code> в терминале NEM. Для работы примеров, использующих случайные числа, результаты могут отличаться при каждом запуске.
+                </div>
+                
+                <hr>
+            </section>
+
+
+
+
+        </div>
+        
+        <footer>
+            <p>© 2026 zabvensk. Все права защищены. Документация NEM Assembly 1.0.</p>
+            <p style="margin-top: 8px;">the document meets the standards of hell</p>
+        </footer>
+    </div>
+<script>
+    const toggleSwitch = document.getElementById('theme-toggle');
+    const themeLabel = document.getElementById('theme-label');
+    document.body.classList.add('dark-theme');
+    toggleSwitch.checked = true;
+    themeLabel.textContent = 'Тёмная';
+    localStorage.setItem('theme', 'dark');
+    function switchTheme(e) {
+        if (e.target.checked) {
+            document.body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
+            themeLabel.textContent = 'Тёмная';
+        } else {
+            document.body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+            themeLabel.textContent = 'Светлая';
+        }    
+    }
+    toggleSwitch.addEventListener('change', switchTheme, false);
+</script>
+</body>
+</html>

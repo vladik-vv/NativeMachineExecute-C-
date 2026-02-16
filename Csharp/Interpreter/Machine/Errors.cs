@@ -1,6 +1,5 @@
-using System.Text;
 using static Parser;
-static class Errors{
+struct Errors{
     static readonly Dictionary<byte, string> err = new Dictionary<byte, string>{
         {0x00, $"\nLine {numberLine + 1}. Error 0x00: Instruction not found"},
         {0x01, $"\nLine {numberLine + 1}. Error 0x01: Address is not exist"},

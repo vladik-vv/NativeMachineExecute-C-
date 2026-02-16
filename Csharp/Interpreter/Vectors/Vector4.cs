@@ -33,7 +33,7 @@ class Vector4{
             case _sub:{
                 switch (cord){
                     case 'X': X -= value; break;
-                    case 'Y': X -= value; break;
+                    case 'Y': Y -= value; break;
                     case 'Z': Z -= value; break;
                     case 'W': W -= value; break;
                 } break;

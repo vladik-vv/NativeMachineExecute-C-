@@ -4,6 +4,17 @@ public enum Instructions{
     _sub,
     _div,
     _mul,
+    _cos,
+    _sin,
+    _tan,
+    _inp,
+    _srt,
+    _max,
+    _min,
+    _rand,
+    _dst,
+    _lng,
+    _lngsq,
     _out,
     _hlt,
     _arr,
@@ -22,6 +33,11 @@ public enum Instructions{
     _vec2,
     _vec3,
     _vec4,
-    _clear
+    _clear,
+    _pop,
+    _push,
+    _popa,
+    _pusha,
+    _len
 
 }

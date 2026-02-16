@@ -1,9 +1,8 @@
 using static Parser;
 using static Instructions;
+using static Executer;
 
-namespace OpCodes;
-
-class GoTo : Executer{ // typeArg1, nameArg1. value, byteValue, shortValue, floatValue, doubleValue, isHigh, isEqual, currentType, line
+struct GoTo{ 
     public static void Execute(Instructions mode, string point){ // прыгнуть на метку
 
         switch (mode){
@@ -29,25 +28,25 @@ class GoTo : Executer{ // typeArg1, nameArg1. value, byteValue, shortValue, floa
             case _ife:{
                 if (isEqual) {
                     if (nameArg1 == "go") Execute(_go, value);
-                    if (nameArg1 == "call") Execute(_call, value);
+                    else if (nameArg1 == "call") Execute(_call, value);
                 } break;
             }
             case _ifn:{
                 if (!isEqual){
                     if (nameArg1 == "go") Execute(_go, value);
-                    if (nameArg1 == "call") Execute(_call, value);
+                    else if (nameArg1 == "call") Execute(_call, value);
                 } break;
             }
             case _ifh:{
                 if (isHigh){
                     if (nameArg1 == "go") Execute(_go, value);
-                    if (nameArg1 == "call") Execute(_call, value);
+                    else if (nameArg1 == "call") Execute(_call, value);
                 } break;
             }
             case _ifl:{
                 if (!isHigh){
                     if (nameArg1 == "go") Execute(_go, value);
-                    if (nameArg1 == "call") Execute(_call, value);
+                    else if (nameArg1 == "call") Execute(_call, value);
                 } break;
             }
         }

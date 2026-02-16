@@ -1,0 +1,8 @@
+__start:
+    go main
+
+.p main:
+    out, "welcome to hell"
+
+__stop:
+    clear registres

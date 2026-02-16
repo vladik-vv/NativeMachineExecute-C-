@@ -1,6 +1,6 @@
 using System.Text;
 
-class Parser
+struct Parser
 {   
     public const string systemKey = "keyboard.key";
     public static Random rnd = new Random();
@@ -73,7 +73,7 @@ class Parser
 
 
     private static void FillCodeParts(){    // заполняем части кода
-        string[] lines = File.ReadAllLines(Terminal.path);
+        string[] lines = File.ReadAllLines(Terminal.Path);
 
         foreach (string line in lines){
 
@@ -122,7 +122,7 @@ class Parser
 
             while (numberLine < codeParts.Count()){
                 
-                CheckerRam.CheckRAM();
+                CheckPC.CheckRAM();
                 if (isWarn) return;
                 string line = codeParts[numberLine];
                 numberLine++;
@@ -131,7 +131,7 @@ class Parser
 
                 try { parts[0] = parts[0]; } catch { continue; }
 
-                if (parts[0][0] == '.' || parts[0][0] == '_') continue; 
+                if (parts[0][0] == '.' || parts[0][0] == '_' || parts[0][0] == ';') continue; 
 
                 if (parts.Count() > 2)
                     CheckArguments.Run(parts[0], parts[1], parts[2], line);

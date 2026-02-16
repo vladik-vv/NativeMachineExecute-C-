@@ -1,16 +1,20 @@
 using static Parser;
-using static Computer;
+using static Init;
 using static System.Convert;
 using static Types;
-using System.Runtime.CompilerServices;
+using static Executer;
 
-namespace OpCodes;
 
-class Compare : Executer{ // typeArg1, nameArg1. value, byteValue, shortValue, floatValue, doubleValue, isHigh, isEqual, currentType, line
+struct Compare{ 
     public static void Execute(){ // сравнение аргументов
 
         isEqual = false;
         isHigh = false;
+
+        if (nameArg1 == value){
+            isEqual = true;
+            return;
+        }
 
         switch (typeArg1){
             case _registres: isHigh = registres[nameArg1] > doubleValue; isEqual = registres[nameArg1] == doubleValue; return;

@@ -1,10 +1,9 @@
 using static Parser;
-using static Computer;
+using static Init;
 using static Instructions;
+using static Executer;
 
-namespace OpCodes;
-
-class CreateVector : Executer{ // typeArg1, nameArg1. value, byteValue, shortValue, floatValue, doubleValue, isHigh, isEqual, currentType, line
+struct CreateVector{ 
     public static void Execute(Instructions t_vec){ // создание вектора
 
         nameVars.Add(value);

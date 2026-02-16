@@ -1,11 +1,10 @@
 using static Parser;
-using static Computer;
+using static Init;
 using static System.Convert;
 using static Types;
+using static Executer;
 
-namespace OpCodes;
-
-class CreateVar : Executer{ // typeArg1, nameArg1. value, byteValue, shortValue, floatValue, doubleValue, isHigh, isEqual, currentType, line
+struct CreateVar{ 
     public static void Execute(Types t_var){ // создание переменной
 
         nameVars.Add(nameArg1); // добавляем в список имен переменных

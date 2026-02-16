@@ -1,14 +1,13 @@
 using static Parser;
-using static Computer;
+using static Init;
 using static System.Convert;
 using static Types;
+using static Executer;
 
-namespace OpCodes;
-
-class CreateArr : Executer{ // typeArg1, nameArg1. value, byteValue, shortValue, floatValue, doubleValue, isHigh, isEqual, currentType, line
+struct CreateArr{ 
     public static void Execute(Types t_var){ // создание переменной
 
-        int num = ToInt32(value);
+        int num = ToInt32(value) - 1;
         nameVars.Add(nameArg1); // добавляем в список имен переменных
         switch (t_var){
             case _byteARR:{
