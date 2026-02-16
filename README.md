@@ -1,4 +1,5 @@
 **Native Execute Machine Assembly** — ассемблер для виртуальной машины из игры zabvensk.
+Написан на языке C# с включенным PublishAOT
 
 ## Версия 1.0
 
