@@ -3,8 +3,9 @@
 /// </summary>
 struct Program
 {
-    static void Main(){
+    static int Main(){
         Init.StartInit();   // Запускаем инициализатор компьютера, инициализируя регистры, оперативку..
         Terminal.StartTerminal();   // Запускаем терминал, сердце программы.
+        return 0;
     }
 }

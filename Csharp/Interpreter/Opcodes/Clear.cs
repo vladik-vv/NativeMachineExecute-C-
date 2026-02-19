@@ -14,6 +14,10 @@ struct Clear{
                 Console.Clear();
                 break;
             }
+            case "keyboard.key":{
+                Init.ClearKey();
+                break;
+            }
             default:{
                 nameVars.Remove(nameArg1);
                 switch (typeArg1){

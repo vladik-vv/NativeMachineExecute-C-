@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
+
+
 /// <summary>
 /// Структура инициализации
 /// </summary>
 struct Init
 {
     public static ConsoleKeyInfo keyInfo;
-    private static CancellationTokenSource cts = new ();
     public const int maxRAM = 262144; // Максимальное количество ОЗУ в пк
     public static int RAM = 0; // Состояние оперативки
     public static Dictionary<string, double> registres = new Dictionary<string, double>{
@@ -25,8 +27,7 @@ struct Init
     public static async void StartInit(){
         RAM = 65536; // При запуске пк, ОЗУ забит 64 мегабайтами. ( Операционка + системы слежки )
 
-        cts = new CancellationTokenSource();
-        Task keyWatch = Task.Run(() => CheckKey(cts.Token));
+        Task keyWatch = Task.Run(() => CheckKey());
     } 
 
     public static void SystemMonitor(){
@@ -48,12 +49,11 @@ struct Init
 
     // запускаем проверку нажатой клавиши в реальном времени в отдельном потоке
     // и записываем изменения в keyInfo
-    private static async Task CheckKey(CancellationToken cancellationToken){
-        while (!cancellationToken.IsCancellationRequested){ 
+    private static async Task CheckKey(){ 
+        while (true){
             if (Console.KeyAvailable){
                 keyInfo = Console.ReadKey(true);
             }
-            await Task.Delay(10, cancellationToken);
         }
     }
 
@@ -61,6 +61,10 @@ struct Init
         foreach (string key in registres.Keys){
             registres[key] = 0;
         }
+    }
+
+    public static void ClearKey(){
+        keyInfo = new ConsoleKeyInfo(); 
     }
 
 }    

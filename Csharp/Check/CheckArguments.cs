@@ -107,6 +107,11 @@ struct CheckArguments{
 
     private static void GetValueToArg1(){
 
+        if (instruction == "clear"){
+            nameArg1 = arg1;
+            return;
+        }
+
         if (arg1 == "keyboard.key"){
             nameArg1 = keyInfo.Key.ToString();
             return;
@@ -307,7 +312,6 @@ struct CheckArguments{
     }
 
     private static int NumberElementArr(string element){
-        
         if (registres.ContainsKey(element)){
             return (int)registres[element];
         } else if (nameVars.Contains(element)){
@@ -374,8 +378,8 @@ struct CheckArguments{
         string[] inp = line.Split()[1].Replace('[', ' ').Replace(']', ' ').Split('*', ' ');
 
         nameArg1 = inp[0].Trim();
-        matrix_y = Convert.ToInt32(inp[1]);
-        matrix_x = Convert.ToInt32(inp[2]);
+        matrix_y = NumberElementArr(inp[1]);
+        matrix_x = NumberElementArr(inp[2]);
 
         if (Matrix2_q.ContainsKey(nameArg1)){
             typeArg1 = _doubleMatrix2;
@@ -395,8 +399,8 @@ struct CheckArguments{
         string[] inp = line.Split()[2 - n].Replace('[', ' ').Replace(']', ' ').Split('*', ' ');
 
         string name = inp[0].Trim();
-        int _y = Convert.ToInt32(inp[1]);
-        int _x = Convert.ToInt32(inp[2]);
+        int _y = NumberElementArr(inp[1]);
+        int _x = NumberElementArr(inp[2]);
 
         if (Matrix2_q.ContainsKey(name)){
             Argument2 = Matrix2_q[name][_y, _x].ToString();
@@ -405,5 +409,6 @@ struct CheckArguments{
             Argument2 = Matrix2_s[name][_y, _x].ToString();
             return;
         }
+
     }
 }
