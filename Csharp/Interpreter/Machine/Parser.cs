@@ -1,126 +1,181 @@
-using static Types;
-using static Instructions;
-using static Parser;
-using static System.Convert;
-using System.Numerics;
+using System.Text;
 
-struct Executer{
-    private static string opcode;
-    public static Types? currentType;
-    public static Types? typeArg1; // тип переменной
-    public static int? elementNumArg1; // номер элемента массива  
-    public static string? nameArg1; // имя переменной
-    public static string value;  // готовое значение, которым изменяем
-    public static int? matrix_x;
-    public static int? matrix_y;
-    public static byte byteValue; // ниже значения, которые уже конвертированы
-    public static short shortValue;
-    public static float floatValue;
-    public static double doubleValue;
-    public static bool isHigh;
-    public static bool isEqual;
-    public static string line;
-    public static Dictionary<string, Action> opcodes = new Dictionary<string, Action>{
-        {"mov", () => Change.Execute(_mov)},
-        {"add", () => Change.Execute(_add)},
-        {"sub", () => Change.Execute(_sub)},
-        {"div", () => Change.Execute(_div)},
-        {"mul", () => Change.Execute(_mul)},
-        {"cos", () => Change.Execute(_cos)},
-        {"sin", () => Change.Execute(_sin)},
-        {"tan", () => Change.Execute(_tan)},
-        {"inp", () => Change.Execute(_inp)},
-        {"max", () => Change.Execute(_max)},
-        {"min", () => Change.Execute(_min)},
-        {"rand", () => Change.Execute(_rand)},
-        {"dst", () => Change.Execute(_dst)},
-        {"lng", () => Change.Execute(_lng)},
-        {"lngsq", () => Change.Execute(_lngsq)},
-        {"len", () => Change.Execute(_len)},
-        {"srt", () => Change.Execute(_srt)},
-        {"db", () => CreateVar.Execute(_byte)},
-        {"dw", () => CreateVar.Execute(_short)},
-        {"dd", () => CreateVar.Execute(_float)},
-        {"dq", () => CreateVar.Execute(_double)},
-        {"ds", () => CreateVar.Execute(_string)},
-        {"arrb", () => CreateArr.Execute(_byteARR)},
-        {"arrw", () => CreateArr.Execute(_shortARR)},
-        {"arrd", () => CreateArr.Execute(_floatARR)},
-        {"arrq", () => CreateArr.Execute(_doubleARR)},
-        {"arrs", () => CreateArr.Execute(_stringARR)},
-        {"mx2_s", () => CreateMX2.Execute(_stringMatrix2)},
-        {"mx2_q", () => CreateMX2.Execute(_doubleMatrix2)},
-        {"out", () => Out.Execute()},
-        {"go", () => GoTo.Execute(_go, value)},
-        {"call", () => GoTo.Execute(_call, value)},
-        {"ife", () => GoTo.ExecuteIF(_ife)},
-        {"ifn", () => GoTo.ExecuteIF(_ifn)},
-        {"ifh", () => GoTo.ExecuteIF(_ifh)},
-        {"ifl", () => GoTo.ExecuteIF(_ifl)},
-        {"ret", () => GoTo.Execute(_ret, value)},
-        {"vec2", () => CreateVector.Execute(_vec2)},
-        {"vec3", () => CreateVector.Execute(_vec3)},
-        {"vec4", () => CreateVector.Execute(_vec4)}, 
-        {"clear", () => Clear.Execute()},
-        {"cmp", () => Compare.Execute()},
-        {"tst_cmp_", () => Console.WriteLine($"IsHigh {isHigh}. IsEqual {isEqual}.")},
-        {"tst_vars_", () => {foreach (string name in nameVars) {Console.Write($"{name} ");}}},
-        {"wait", () => Thread.Sleep(Convert.ToInt32(value))},
-        {"pop", () => OStack.Execute(_pop)},
-        {"popa", () => OStack.Execute(_popa)},
-        {"push", () => OStack.Execute(_push)},
-        {"pusha", () => OStack.Execute(_pusha)},
-        {"hlt", () => ExecuteHalt()},
-        // matrix3 - массив 3д
-        // matrix4 - массив 4д
-    };
-    
-    public static void Start(string _instruction, Types? _currentType, Types? _typeArg1, int _elementNumArg1, string? _nameArg1,  string _value, int? _matrix_x, int? _matrix_y, string _line){
-        opcode = _instruction;
-        currentType = _currentType;
-        typeArg1 = _typeArg1;
-        elementNumArg1 = _elementNumArg1;
-        nameArg1 = _nameArg1;
-        value = _value;
-        matrix_x = _matrix_x;
-        matrix_y = _matrix_y;
-        line = _line;
-        
-        CheckTypeAndConvertValue(); 
-        CheckPC.CheckRAM();
-        opcodes[opcode]();
-    }
+struct Parser
+{   
+    public const string systemKey = "keyboard.key";
+    public static Random rnd = new Random();
+    public static int? stackAddress; // стэк для запоминания адреса
+    public static string[] systemArguments = ["0", "0"]; // one, two.
+    public static string[] parts = []; // список в котором будут части линии инструкций
+    public static int numberLine = 0; // номер текущей строки
+    public static Dictionary<int, string> codeParts = new Dictionary<int, string>();
+    // библиотека в которой хранится ключ: адрес и значение это линия кода.
+    public static Dictionary<string, int> blocks = new Dictionary<string, int>();
+    // библиотека в которой хранятся адреса блоков
+    public static bool isWarn; // закончилась ли программа с ошибкой
 
-    static void CheckTypeAndConvertValue(){ // проверяем, какой тип у 1 аргумента и конвертируем в этот тип готовое значение (2 аргумент).
-        if (opcode == "pusha" || opcode == "popa" || opcode == "pop" || opcode == "push" || opcode == "inp" || opcode == "clear" || opcode == "lng" || opcode == "lngsq" || opcode == "max" || opcode == "min" || opcode == "len" || opcode == "srt" || opcode == "mx2_s" || opcode == "mx2_q") 
-            return;
-            
-        switch (typeArg1){
-            case _registres:
-            case _double:
-            case _doubleARR:
-            case _vector2x:
-            case _vector2y:
-            case _vector3x:
-            case _vector3y:
-            case _vector3z:
-            case _vector4x:
-            case _vector4y:
-            case _vector4z:
-            case _doubleMatrix2:
-            case _vector4w:{
-                doubleValue = ToDouble(value); return;
+    public static List<string> nameVars = new List<string>();
+    public static Dictionary<string, byte> byteVars = new Dictionary<string, byte>();
+    public static Dictionary<string, short> shortVars = new Dictionary<string, short>();
+    public static Dictionary<string, float> floatVars = new Dictionary<string, float>();
+    public static Dictionary<string, double> doubleVars = new Dictionary<string, double>();
+    public static Dictionary<string, string> stringVars = new Dictionary<string, string>();
+    public static Dictionary<string, byte[]> byteArrs = new Dictionary<string, byte[]>();
+    public static Dictionary<string, short[]> shortArrs = new Dictionary<string, short[]>();
+    public static Dictionary<string, float[]> floatArrs = new Dictionary<string, float[]>();
+    public static Dictionary<string, double[]> doubleArrs = new Dictionary<string, double[]>();
+    public static Dictionary<string, string[]> stringArrs = new Dictionary<string, string[]>();
+    public static Dictionary<string, string[,]> Matrix2_s = new Dictionary<string, string[,]>();
+    public static Dictionary<string, double[,]> Matrix2_q = new Dictionary<string, double[,]>();
+    public static Dictionary<string, Vector2> vec2s = new Dictionary<string, Vector2>();
+    public static Dictionary<string, Vector3> vec3s = new Dictionary<string, Vector3>();
+    public static Dictionary<string, Vector4> vec4s = new Dictionary<string, Vector4>();
+
+    public static void Run(string mode){
+        switch (mode){
+            case "dis":{
+                Clear();
+                FillCodeParts();
+                DisAssembly();  // дизассемблирование
+                break;
             }
-            case _byteARR:
-            case _byte: byteValue = ToByte(value); return;
-            case _shortARR:
-            case _short: shortValue = ToInt16(value); return;
-            case _floatARR:
-            case _float: floatValue = ToSingle(value); return;
+            case "run":{
+                Clear(); // очищаем мусор
+                FillCodeParts(); // заполняем список с кодом
+                Interpetation(); // интерпретация
+
+                Console.WriteLine();
+                break;    
+            }
         }
     }
 
-    static void ExecuteHalt(){ // перейти к блоку СТОП
-        numberLine = blocks["__stop:"];
+    private static void Clear(){
+        parts = [];
+        isWarn = false;
+        numberLine = 0;
+        stackAddress = -1;
+        vec2s.Clear();
+        vec3s.Clear();
+        vec4s.Clear();
+        nameVars.Clear();
+        byteVars.Clear();
+        shortVars.Clear();
+        floatVars.Clear();
+        doubleVars.Clear();
+        stringVars.Clear();
+        byteArrs.Clear();
+        shortArrs.Clear();
+        floatArrs.Clear();
+        doubleArrs.Clear();
+        stringArrs.Clear();
+        Matrix2_q.Clear();
+        Matrix2_s.Clear();
+        blocks.Clear();
+        codeParts.Clear();
+    }
+
+
+    private static void FillCodeParts(){    // заполняем части кода
+        string[] lines = File.ReadAllLines(Terminal.Path);
+
+        foreach (string line in lines){
+
+            try {char temp = line.Trim(' ')[1];} catch {continue;}
+
+            switch (line.Trim().Split()[0]){
+                case ".p":{
+                    blocks.Add(line.Trim().Split()[1], numberLine + 1);
+                    break;
+                }
+                case "__stop:":{
+                    blocks.Add("__stop:", numberLine);
+                    break;
+                }
+                case "__start:":{
+                    blocks.Add("__start:", numberLine);
+                    break;
+                }
+            }
+
+            StringBuilder txt = new StringBuilder();
+            bool commaRemove = false;   // запятая пропущена?
+            foreach (char ch in line){
+                if ((ch == ',' || ch == '\'') && commaRemove == false){
+                    if (ch == '\''){
+                        txt.Append(ch);
+                        commaRemove = true; 
+                        continue;
+                    }
+                    commaRemove = true;
+                    continue;
+                } else {
+                    txt.Append(ch);
+                }
+            }
+
+            codeParts.Add(numberLine, txt.ToString().Trim());
+            numberLine++; 
+            txt.Clear();
+        }
+    }
+
+    private static void Interpetation(){    // проходимся по каждой линии
+        try {
+            numberLine = blocks["__start:"];
+
+            while (numberLine < codeParts.Count()){
+                
+                CheckPC.CheckRAM();
+                if (isWarn) return;
+                string line = codeParts[numberLine];
+                numberLine++;
+
+                parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries); 
+
+                try { parts[0] = parts[0]; } catch { continue; }
+
+                if (parts[0][0] == '.' || parts[0][0] == '_' || parts[0][0] == ';') continue; 
+
+                if (parts.Count() > 2)
+                    CheckArguments.Run(parts[0], parts[1], parts[2], line);
+
+                else if (parts.Count() == 2)
+                    CheckArguments.Run(parts[0], parts[1], null, line);
+
+                else if (parts.Count() == 1)
+                    CheckArguments.Run(parts[0], null, null, line);
+
+            }
+        } catch {
+            Console.Error.WriteLine($"Unhandled error! LineCode: < {codeParts[numberLine - 1]} >");
+            return;
+        }
+
+    }
+
+    private static void DisAssembly(){      // диз-ассемблирование кода (инструкция заменяется на хекс код)
+        StringBuilder txt = new StringBuilder();
+        foreach (string line in codeParts.Values){
+            txt.Append($"0x{rnd.NextInt64(100000000000000, 999999999999999)}    ");
+            int countChars = 30;
+            byte count = 0;
+            foreach (char b in Convert.ToHexString(Encoding.ASCII.GetBytes(line.Split()[0]))){
+                if (count == 2) {txt.Append(" "); count = 0; countChars--;}
+                txt.Append(b);
+                countChars--;
+                count++;
+            }
+            for (int i = 0; i < countChars; i++){
+                txt.Append(" ");
+            }
+            foreach (string part in line.Split()){
+                if (part != line.Split()[0]){
+                    txt.Append(part + " ");
+                }
+            }
+            txt.Append("\n");
+        }
+        Console.Write(txt);
     }
 }

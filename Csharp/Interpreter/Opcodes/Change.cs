@@ -194,7 +194,20 @@ struct Change{
             }
 
             case _rand:{
-                registres["rnd"] = new Random().NextInt64(Convert.ToInt64(nameArg1), Convert.ToInt64(value));
+                double num1 = 0;
+                switch (typeArg1){
+                    case _registres: num1 = registres[nameArg1]; break;
+                    case _byte: num1 = byteVars[nameArg1]; break;
+                    case _short: num1 = shortVars[nameArg1]; break;
+                    case _float: num1 = floatVars[nameArg1]; break;
+                    case _double: num1 = doubleVars[nameArg1]; break;
+                    case _byteARR: num1 = byteArrs[nameArg1][elementNumArg1 ?? 0]; break;
+                    case _shortARR: num1 = shortArrs[nameArg1][elementNumArg1 ?? 0]; break;
+                    case _floatARR: num1 = floatArrs[nameArg1][elementNumArg1 ?? 0]; break;
+                    case _doubleARR: num1 = doubleArrs[nameArg1][elementNumArg1 ?? 0]; break;
+                }
+
+                registres["rnd"] = new Random().NextInt64(Convert.ToInt64(num1), Convert.ToInt64(value));
                 return;
             }
 

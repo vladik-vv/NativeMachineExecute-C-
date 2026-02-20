@@ -53,6 +53,14 @@ struct Terminal
                     _isRun = false;
                     return;
                 }
+                case "show cursor":{
+                    Console.CursorVisible = true;
+                    return;
+                }
+                case "hide cursor":{
+                    Console.CursorVisible = false;
+                    return;
+                }
                 case "clear":{
                     Console.Clear();
                     Console.Write("\nSystem Control num: 130022\n\n");
@@ -109,6 +117,15 @@ struct Terminal
                         }
 
                     }
+                    break;
+                }
+
+                case "show cursor":{
+                    Console.CursorVisible = true;
+                    break;
+                }
+                case "hide cursor":{
+                    Console.CursorVisible = false;
                     break;
                 }
 

@@ -14,6 +14,10 @@ struct Clear{
                 Console.Clear();
                 break;
             }
+            case "cursor":{
+                Console.SetCursorPosition(0, 0);
+                break;
+            }
             case "keyboard.key":{
                 Init.ClearKey();
                 break;
