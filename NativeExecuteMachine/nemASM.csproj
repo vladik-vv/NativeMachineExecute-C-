@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <PublishAOT>true</PublishAOT>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IlcInstructionSet>base</IlcInstructionSet>
+    <OptimizationPreference>Speed</OptimizationPreference>
+    <Optimize>true</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TrimMode>full</TrimMode>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableSIMD>true</EnableSIMD>
+    <VectorTracing>true</VectorTracing>
+    <TieredCompilation>false</TieredCompilation>
+    <ReadyToRun>true</ReadyToRun>
+    <ReadyToRunComposite>true</ReadyToRunComposite>
+    <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+    <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
+    <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+    <IlcMethodBodyFolding>true</IlcMethodBodyFolding>
+    <StackTraceSupport>false</StackTraceSupport>
+    <EventSourceSupport>false</EventSourceSupport>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <WarningLevel>0</WarningLevel>
+    <NoWarn>CS0169,CS0649,CS8618,CS1591</NoWarn>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Runtime.TieredCompilation" Value="false" />
+    <RuntimeHostConfigurationOption Include="System.GC.Concurrent" Value="true" />
+    <RuntimeHostConfigurationOption Include="System.GC.Server" Value="true" />
+  </ItemGroup>
+</Project>
